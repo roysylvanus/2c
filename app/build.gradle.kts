@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    // modules
+    implementation(project(":core:designsystem"))
 
     //accompanist
     implementation(libs.accompanist.swiperefresh)
