@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -9,8 +11,17 @@ android {
     namespace = "com.techadive.network"
     compileSdk = 35
 
+    val secretsProperties = Properties()
+    val secretsFile = rootProject.file("secrets.properties")
+    if (secretsFile.exists()) {
+        secretsFile.inputStream().use { secretsProperties.load(it) }
+    }
+
     defaultConfig {
         minSdk = 26
+
+        val token = secretsProperties.getProperty("TMDB_ACCESS_TOKEN") ?: ""
+        buildConfigField("String", "TMDB_ACCESS_TOKEN", "\"$token\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -30,7 +41,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
+    }
+    hilt {
+        enableAggregatingTask = false
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
