@@ -8,8 +8,35 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
+appcompat = "1.7.0"
+material = "1.12.0"
+daggerHiltVersion = "2.51.1"
+lifecycleVersion = "2.2.0"
+roomVersion = "2.6.1"
+mockitoVersion = "5.13.0"
+mockitoKotlinVersion = "4.0.0"
+hamcrestVersion = "3.0"
+roboelectricVersion = "4.13"
+coroutinesVersionTest = "1.7.3"
+archCoreTest = "2.2.0"
+retrofit2Version = "2.11.0"
+okhttp3Version = "4.10.0"
+coilVersion = "2.6.0"
+gsonVersion = "2.10.1"
+material3Android = "1.3.2"
+navigationCompose = "2.9.0"
+composeMaterial = "1.8.1"
+jetbrainsKotlinJvm = "2.0.20"
+uiAndroid = "1.8.1"
+accompanistSwipeRefresh = "0.32.0"
+lifecycleViewmodelAndroid = "2.9.0"
 
 [libraries]
+compose-material = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial"}
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilVersion" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHiltVersion" }
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHiltVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -24,9 +51,34 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycleVersion" }
+retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2Version" }
+retrofitGsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2Version" }
+okhttp3LoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3Version" }
+
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoVersion" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlinVersion" }
+
+hamcrest = { group = "org.hamcrest", name = "hamcrest", version.ref = "hamcrestVersion" }
+roboelectric = { group = "org.robolectric", name = "robolectric", version.ref = "roboelectricVersion" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesVersionTest" }
+core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCoreTest" }
+code-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVersion" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
+accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh",version.ref = "accompanistSwipeRefresh" }
+androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+android-library = { id = "com.android.library", version.ref = "agp" }
+hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltVersion" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
