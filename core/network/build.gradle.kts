@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    alias(libs.plugins.hiltAndroid)
 }
 
 android {
-    namespace = "com.techadive.utils"
+    namespace = "com.techadive.network"
     compileSdk = 35
 
     defaultConfig {
@@ -37,6 +39,15 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    implementation(libs.dagger.hilt)
+    kapt(libs.hilt.compiler)
+
+    implementation(libs.code.gson)
+    implementation(libs.retrofit2)
+    implementation(libs.retrofitGsonConverter)
+    implementation(libs.okhttp3LoggingInterceptor)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
