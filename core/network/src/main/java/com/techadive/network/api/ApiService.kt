@@ -1,8 +1,9 @@
 package com.techadive.network.api
 
-import com.techadive.network.models.MovieListDTOs
-import com.techadive.network.models.MovieListWithDatesDTOs
+import com.techadive.network.models.MovieListDTO
+import com.techadive.network.models.MovieListWithDatesDTO
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -18,8 +19,8 @@ interface ApiService {
     @GET("/movie/upcoming")
     suspend fun getUpcomingMovies(
         @Query("language") language: String,
-        @Query("page") page: String,
-    ): MovieListWithDatesDTOs
+        @Query("page") page: Int = 1,
+    ): MovieListWithDatesDTO
 
 
     /**
@@ -29,8 +30,8 @@ interface ApiService {
     @GET("/movie/now_playing")
     suspend fun getNowPlayingMovies(
         @Query("language") language: String,
-        @Query("page") page: String,
-    ): MovieListWithDatesDTOs
+        @Query("page") page: Int = 1,
+    ): MovieListWithDatesDTO
 
 
     /**
@@ -40,8 +41,8 @@ interface ApiService {
     @GET("/movie/popular")
     suspend fun getPopularMovies(
         @Query("language") language: String,
-        @Query("page") page: String,
-    ): MovieListDTOs
+        @Query("page") page: Int = 1,
+    ): MovieListDTO
 
     /**
      * Endpoint to fetch top rated movies
@@ -50,7 +51,17 @@ interface ApiService {
     @GET("/movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("language") language: String,
-        @Query("page") page: String,
-    ): MovieListDTOs
+        @Query("page") page: Int = 1,
+    ): MovieListDTO
 
+
+    /**
+     * Endpoint to fetch movie details
+     * **/
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetails(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = "en-US"
+    ): MovieListDTO
 }
