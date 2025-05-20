@@ -5,6 +5,7 @@ import com.techadive.movie.repositories.MovieRepositoryImpl
 import com.techadive.network.api.ApiService
 import com.techadive.common.LanguageProviderImpl
 import com.techadive.common.LanguageProvider
+import com.techadive.data.local.dao.MovieDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,10 +25,12 @@ class MovieModule {
     @Provides
     fun provideMovieRepository(
         languageProvider: LanguageProvider,
-        apiService: ApiService
+        apiService: ApiService,
+        movieDao: MovieDao
     ): MovieRepository =
         MovieRepositoryImpl(
             apiService,
-            languageProvider
+            languageProvider,
+            movieDao
         )
 }

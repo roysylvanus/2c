@@ -160,7 +160,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun searchMovies(
         query: String,
-        includeAdult: Boolean,
+        includeAdult: Boolean ,
         page: Int
     ): Flow<AppResult<MovieList>> {
         return flow {
