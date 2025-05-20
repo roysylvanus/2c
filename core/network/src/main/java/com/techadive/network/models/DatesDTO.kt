@@ -1,6 +1,6 @@
 package com.techadive.network.models
 
-data class MovieDates(
+data class DatesDTO(
     val maximum: String,
     val minimum: String
 )

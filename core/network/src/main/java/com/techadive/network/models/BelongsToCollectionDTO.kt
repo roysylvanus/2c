@@ -1,6 +1,6 @@
 package com.techadive.network.models
 
-data class BelongsToCollection(
+data class BelongsToCollectionDTO(
     val backdrop_path: String,
     val id: Int,
     val name: String,

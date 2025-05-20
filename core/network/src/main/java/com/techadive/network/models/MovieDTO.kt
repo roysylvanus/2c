@@ -1,6 +1,6 @@
 package com.techadive.network.models
 
-data class MovieResult(
+data class MovieDTO(
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,
