@@ -1,5 +1,6 @@
 package com.techadive.network.api
 
+import com.techadive.network.models.MovieDetailsDTO
 import com.techadive.network.models.MovieListDTO
 import com.techadive.network.models.MovieListWithDatesDTO
 import retrofit2.http.GET
@@ -59,9 +60,22 @@ interface ApiService {
      * Endpoint to fetch movie details
      * **/
 
-    @GET("movie/{movie_id}")
+    @GET("/movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int,
         @Query("language") language: String = "en-US"
+    ): MovieDetailsDTO
+
+
+    /**
+     * Endpoint to search for a movie
+     * **/
+
+    @GET("/search/movie")
+    suspend fun searchMovie(
+        @Query("query") query: String,
+        @Query("include_adult") includeAdult: Boolean,
+        @Query("language") language: String,
+        @Query("page") page: Int = 1
     ): MovieListDTO
 }

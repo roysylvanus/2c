@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
 
     implementation(libs.dagger.hilt)
     kapt(libs.hilt.compiler)

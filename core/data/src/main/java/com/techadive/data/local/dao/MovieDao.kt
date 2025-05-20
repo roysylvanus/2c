@@ -4,15 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.techadive.data.local.entities.MovieEntity
+import com.techadive.data.local.entities.MovieListEntity
 
 @Dao
 interface MovieDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovies(entity: List<MovieEntity>)
+    @Query("SELECT * FROM movie_lists WHERE category = :category LIMIT 1")
+    suspend fun getMovieListByCategory(category: String): MovieListEntity?
 
-    @Query("SELECT * FROM movies")
-    suspend fun getMovies(): List<MovieEntity>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMovieList(movieList: MovieListEntity)
 
 }

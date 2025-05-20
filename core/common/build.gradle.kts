@@ -1,13 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
-    alias(libs.plugins.hiltAndroid)
-    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    namespace = "com.techadive.movie"
+    namespace = "com.techadive.common"
     compileSdk = 35
 
     defaultConfig {
@@ -33,38 +30,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    hilt {
-        enableAggregatingTask = false
-    }
 }
 
 dependencies {
-
-    // modules
-    implementation(project(":core:network"))
-    implementation(project(":core:common"))
-    implementation(project(":core:data"))
-
-    //hilt
-    implementation(libs.dagger.hilt)
-    kapt(libs.hilt.compiler)
-
-    //core
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-
-    // compose
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.compose.material)
-
-    //accompanist
-    implementation(libs.accompanist.swiperefresh)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

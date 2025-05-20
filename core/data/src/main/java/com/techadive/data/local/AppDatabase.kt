@@ -5,10 +5,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.techadive.data.local.converters.GenreListConverter
 import com.techadive.data.local.dao.MovieDao
-import com.techadive.data.local.entities.MovieEntity
+import com.techadive.data.local.entities.MovieListEntity
 
 @Database(
-    entities = [MovieEntity::class],
+    entities = [MovieListEntity::class],
     version = 1
 )
 @TypeConverters(GenreListConverter::class)

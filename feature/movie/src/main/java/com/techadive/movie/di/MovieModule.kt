@@ -3,8 +3,8 @@ package com.techadive.movie.di
 import com.techadive.movie.repositories.MovieRepository
 import com.techadive.movie.repositories.MovieRepositoryImpl
 import com.techadive.network.api.ApiService
-import com.techadive.utils.LanguageProviderImpl
-import com.techadive.utils.LanguageProvider
+import com.techadive.common.LanguageProviderImpl
+import com.techadive.common.LanguageProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

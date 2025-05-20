@@ -1,5 +1,7 @@
 package com.techadive.network.models
 
+import com.techadive.common.models.MovieDetails
+
 data class MovieDetailsDTO(
     val adult: Boolean,
     val backdrop_path: String,
@@ -28,3 +30,33 @@ data class MovieDetailsDTO(
     val vote_average: Double,
     val vote_count: Int
 )
+
+fun MovieDetailsDTO.convertToMovieDetails() =
+    MovieDetails(
+        adult = this.adult,
+        backdropPath = this.backdrop_path,
+        belongsToCollection = this.belongs_to_collection.convertToBelongsToCollection(),
+        budget = this.budget,
+        genres = this.genres.map { it.convertToGenre() },
+        homepage = this.homepage,
+        id = id,
+        imdbId = this.imdb_id,
+        originCountry = this.origin_country,
+        originalTitle = this.original_title,
+        originalLanguage = this.original_language,
+        overview = this.overview,
+        popularity = this.popularity,
+        posterPath = this.poster_path,
+        productionCompanies = this.production_companies.map { it.convertToProductionCompany() },
+        productionCountries = this.production_countries.map { it.convertToProductionCountry() },
+        releaseDate = this.release_date,
+        revenue = this.revenue,
+        runtime = this.runtime,
+        spokenLanguages = this.spoken_languages.map { it.convertToSpokenLanguage() },
+        status = this.status,
+        tagline = this.tagline,
+        title = this.title,
+        video = this.video,
+        voteAverage = this.vote_average,
+        voteCount = this.vote_count
+    )

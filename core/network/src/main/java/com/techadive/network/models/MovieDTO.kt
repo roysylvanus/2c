@@ -1,5 +1,7 @@
 package com.techadive.network.models
 
+import com.techadive.common.models.Movie
+
 data class MovieDTO(
     val adult: Boolean,
     val backdrop_path: String,
@@ -16,3 +18,22 @@ data class MovieDTO(
     val vote_average: Double,
     val vote_count: Int
 )
+
+fun MovieDTO.convertToMovie() =
+    Movie(
+        adult = this.adult,
+        backdropPath = this.backdrop_path,
+        genreIds = this.genre_ids,
+        id = this.id,
+        originalLanguage = this.original_language,
+        originalTitle = this.original_title,
+        overview = this.overview,
+        popularity = this.popularity,
+        releaseDate = this.release_date,
+        title = this.title,
+        video = this.video,
+        voteAverage = this.vote_average,
+        voteCount = this.vote_count,
+        posterPath = this.poster_path,
+        isFavorite = false
+    )

@@ -1,51 +1,201 @@
 package com.techadive.movie.repositories
 
-import com.techadive.movie.models.Movie
-import com.techadive.movie.models.MovieDetails
+import com.techadive.data.local.dao.MovieDao
+import com.techadive.common.models.MovieDetails
 import com.techadive.network.api.ApiService
-import com.techadive.utils.LanguageProvider
-import com.techadive.utils.Resource
+import com.techadive.common.LanguageProvider
+import com.techadive.common.AppResult
+import com.techadive.common.models.MovieList
+import com.techadive.data.local.entities.convertToMovieList
+import com.techadive.data.local.entities.convertToMovieListEntity
+import com.techadive.movie.utils.MovieListCategory
+import com.techadive.network.models.convertToMovieDetails
+import com.techadive.network.models.convertToMovieList
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 interface MovieRepository {
-    suspend fun getNowPlayingMovies(page: Int): Flow<Resource<List<Movie>>>
-    suspend fun getPopularMovies(page: Int): Flow<Resource<List<Movie>>>
-    suspend fun getTopRatedMovies(page: Int): Flow<Resource<List<Movie>>>
-    suspend fun getUpcomingMovies(page: Int): Flow<Resource<List<Movie>>>
-    suspend fun searchMovies(query: String, page: Int): Flow<Resource<List<Movie>>>
-    suspend fun getMovieDetails(movieId: String): Flow<Resource<MovieDetails>>
+    suspend fun getNowPlayingMovies(page: Int): Flow<AppResult<MovieList>>
+    suspend fun getPopularMovies(page: Int): Flow<AppResult<MovieList>>
+    suspend fun getTopRatedMovies(page: Int): Flow<AppResult<MovieList>>
+    suspend fun getUpcomingMovies(page: Int): Flow<AppResult<MovieList>>
+    suspend fun searchMovies(
+        query: String,
+        includeAdult: Boolean,
+        page: Int
+    ): Flow<AppResult<MovieList>>
+
+    suspend fun getMovieDetails(movieId: Int): Flow<AppResult<MovieDetails>>
 }
 
 class MovieRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    private val languageProvider: LanguageProvider
-): MovieRepository {
-    override suspend fun getNowPlayingMovies(page: Int): Flow<Resource<List<Movie>>> {
-        TODO("Not yet implemented")
+    private val languageProvider: LanguageProvider,
+    private val movieDao: MovieDao
+) : MovieRepository {
+    override suspend fun getNowPlayingMovies(page: Int): Flow<AppResult<MovieList>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieListWithDatesDto = apiService.getNowPlayingMovies(
+                    language = languageProvider.getLanguage(),
+                    page = page
+                )
+
+                val movieList = movieListWithDatesDto.convertToMovieList().copy(
+                    category = MovieListCategory.NOW_PLAYING.value,
+                )
+
+                movieDao.insertMovieList(movieList.convertToMovieListEntity())
+
+                emit(AppResult.Success(movieList))
+            } catch (e: Exception) {
+
+                val cachedMovieList =
+                    movieDao.getMovieListByCategory(MovieListCategory.NOW_PLAYING.value)
+
+                if (cachedMovieList != null) {
+                    emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                } else {
+                    emit(AppResult.Error(e))
+                }
+            }
+        }
     }
 
-    override suspend fun getPopularMovies(page: Int): Flow<Resource<List<Movie>>> {
-        TODO("Not yet implemented")
+    override suspend fun getPopularMovies(page: Int): Flow<AppResult<MovieList>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieListDto = apiService.getPopularMovies(
+                    language = languageProvider.getLanguage(),
+                    page = page
+                )
+
+                val movieList = movieListDto.convertToMovieList().copy(
+                    category = MovieListCategory.POPULAR.value,
+                )
+
+                movieDao.insertMovieList(movieList.convertToMovieListEntity())
+
+                emit(AppResult.Success(movieList))
+            } catch (e: Exception) {
+
+                val cachedMovieList =
+                    movieDao.getMovieListByCategory(MovieListCategory.POPULAR.value)
+
+                if (cachedMovieList != null) {
+                    emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                } else {
+                    emit(AppResult.Error(e))
+                }
+            }
+        }
     }
 
-    override suspend fun getTopRatedMovies(page: Int): Flow<Resource<List<Movie>>> {
-        TODO("Not yet implemented")
+    override suspend fun getTopRatedMovies(page: Int): Flow<AppResult<MovieList>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieListDto = apiService.getTopRatedMovies(
+                    language = languageProvider.getLanguage(),
+                    page = page
+                )
+
+                val movieList = movieListDto.convertToMovieList().copy(
+                    category = MovieListCategory.TOP_RATED.value,
+                )
+
+                movieDao.insertMovieList(movieList.convertToMovieListEntity())
+
+                emit(AppResult.Success(movieList))
+            } catch (e: Exception) {
+
+                val cachedMovieList =
+                    movieDao.getMovieListByCategory(MovieListCategory.TOP_RATED.value)
+
+                if (cachedMovieList != null) {
+                    emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                } else {
+                    emit(AppResult.Error(e))
+                }
+            }
+        }
     }
 
-    override suspend fun getUpcomingMovies(page: Int): Flow<Resource<List<Movie>>> {
-        TODO("Not yet implemented")
+    override suspend fun getUpcomingMovies(page: Int): Flow<AppResult<MovieList>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieListWithDatesDto = apiService.getUpcomingMovies(
+                    language = languageProvider.getLanguage(),
+                    page = page
+                )
+
+                val movieList = movieListWithDatesDto.convertToMovieList().copy(
+                    category = MovieListCategory.UPCOMING.value,
+                )
+
+                movieDao.insertMovieList(movieList.convertToMovieListEntity())
+
+                emit(AppResult.Success(movieList))
+            } catch (e: Exception) {
+
+                val cachedMovieList =
+                    movieDao.getMovieListByCategory(MovieListCategory.UPCOMING.value)
+
+                if (cachedMovieList != null) {
+                    emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                } else {
+                    emit(AppResult.Error(e))
+                }
+            }
+        }
     }
 
     override suspend fun searchMovies(
         query: String,
+        includeAdult: Boolean,
         page: Int
-    ): Flow<Resource<List<Movie>>> {
-        TODO("Not yet implemented")
+    ): Flow<AppResult<MovieList>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieList = apiService.searchMovie(
+                    query = query,
+                    includeAdult = includeAdult,
+                    language = languageProvider.getLanguage(),
+                    page = page
+                )
+
+                emit(AppResult.Success(movieList.convertToMovieList()))
+            } catch (e: Exception) {
+                emit(AppResult.Error(e))
+            }
+        }
     }
 
-    override suspend fun getMovieDetails(movieId: String): Flow<Resource<MovieDetails>> {
-        TODO("Not yet implemented")
+    override suspend fun getMovieDetails(movieId: Int): Flow<AppResult<MovieDetails>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieDetails = apiService.getMovieDetails(
+                    movieId = movieId,
+                    language = languageProvider.getLanguage()
+                ).convertToMovieDetails()
+
+                emit(AppResult.Success(movieDetails))
+            } catch (e: Exception) {
+                emit(AppResult.Error(e))
+            }
+        }
     }
 
 }
