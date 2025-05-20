@@ -3,7 +3,7 @@ package com.techadive.designsystem.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.techadive.designsystem.AppTheme
+import com.techadive.data.stores.settings.AppTheme
 import com.techadive.designsystem.theme.Palette.blue
 import com.techadive.designsystem.theme.Palette.darkBlue
 import com.techadive.designsystem.theme.Palette.darkGrey

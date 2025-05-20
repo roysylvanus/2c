@@ -1,4 +1,4 @@
-package com.techadive.designsystem
+package com.techadive.data.stores.settings
 
 enum class AppTheme(val title: String) {
     MODE_AUTO("auto"),

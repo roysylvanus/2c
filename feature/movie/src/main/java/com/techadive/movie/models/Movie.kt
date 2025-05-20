@@ -1,5 +1,6 @@
 package com.techadive.movie.models
 
+import com.techadive.data.local.entities.MovieEntity
 import com.techadive.network.models.MovieDTO
 
 data class Movie(
@@ -16,7 +17,8 @@ data class Movie(
     val title: String,
     val video: Boolean,
     val voteAverage: Double,
-    val voteCount: Int
+    val voteCount: Int,
+    val isFavorite: Boolean
 )
 
 fun MovieDTO.convertToMovie() =
@@ -34,5 +36,25 @@ fun MovieDTO.convertToMovie() =
         video = this.video,
         voteAverage = this.vote_average,
         voteCount = this.vote_count,
-        posterPath = this.poster_path
+        posterPath = this.poster_path,
+        isFavorite = false
+    )
+
+fun MovieEntity.convertToMovie() =
+    Movie(
+        adult = this.adult,
+        backdropPath = this.backdropPath,
+        genreIds = this.genreIds,
+        id = this.id,
+        originalLanguage = this.originalLanguage,
+        originalTitle = this.originalTitle,
+        overview = this.overview,
+        popularity = this.popularity,
+        releaseDate = this.releaseDate,
+        title = this.title,
+        video = this.video,
+        voteAverage = this.voteAverage,
+        voteCount = this.voteCount,
+        posterPath = this.posterPath,
+        isFavorite = isFavorite
     )
