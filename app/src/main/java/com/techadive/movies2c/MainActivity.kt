@@ -4,44 +4,58 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.techadive.common.AppRoutes
 import com.techadive.designsystem.theme.Movies2cTheme
+import com.techadive.movie.ui.search.SearchListView
+import com.techadive.movie.viewmodels.HomeViewModel
+import com.techadive.movie.viewmodels.SearchViewModel
+import com.techadive.movies2c.ui.dashboard.DashboardView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Movies2cTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainNavHost(
+                    homeViewModel,
+                    searchViewModel
+                )
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun MainNavHost(
+    homeViewModel: HomeViewModel,
+    searchViewModel: SearchViewModel
+) {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Movies2cTheme {
-        Greeting("Android")
+    NavHost(navController = navController, startDestination = AppRoutes.DASHBOARD.route) {
+        composable(AppRoutes.DASHBOARD.route) {
+            DashboardView(
+                navController,
+                homeViewModel
+            )
+        }
+
+        composable(AppRoutes.SEARCH.route) {
+            SearchListView(
+                searchViewModel
+            )
+        }
     }
 }

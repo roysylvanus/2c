@@ -2,7 +2,7 @@ package com.techadive.common.models
 
 data class Movie(
     val adult: Boolean,
-    val backdropPath: String,
+    val backdropPath: String?,
     val genreIds: List<Int>,
     val id: Int,
     val originalLanguage: String,

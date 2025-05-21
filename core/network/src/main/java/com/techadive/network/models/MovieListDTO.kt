@@ -10,7 +10,7 @@ data class MovieListDTO(
 )
 
 data class MovieListWithDatesDTO(
-    val dates: DatesDTO,
+    val dates: DatesDTO?,
     val page: Int,
     val results: List<MovieDTO>,
     val total_pages: Int,
@@ -29,7 +29,7 @@ fun MovieListDTO.convertToMovieList() =
 
 fun MovieListWithDatesDTO.convertToMovieList() =
     MovieList(
-        dates = this.dates.convertToDates(),
+        dates = this.dates?.convertToDates(),
         page = this.page,
         results = this.results.map {
             it.convertToMovie()

@@ -6,8 +6,12 @@ import com.techadive.common.models.Dates
 
 class DatesConverter {
     @TypeConverter
-    fun fromDates(dates: Dates): String = Gson().toJson(dates)
+    fun fromDates(dates: Dates?): String? {
+        return dates?.let { Gson().toJson(it) }
+    }
 
     @TypeConverter
-    fun toDates(json: String): Dates = Gson().fromJson(json, Dates::class.java)
+    fun toDates(json: String?): Dates? {
+        return json?.let { Gson().fromJson(it, Dates::class.java) }
+    }
 }

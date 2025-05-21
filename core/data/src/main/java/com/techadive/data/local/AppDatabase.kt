@@ -11,7 +11,8 @@ import com.techadive.data.local.entities.MovieListEntity
 
 @Database(
     entities = [MovieListEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(GenreListConverter::class, DatesConverter::class, MovieListConverter::class)
 abstract class AppDatabase : RoomDatabase() {

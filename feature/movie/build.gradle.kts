@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:common"))
     implementation(project(":core:data"))
+    implementation(project(":core:designsystem"))
 
     //hilt
     implementation(libs.dagger.hilt)
@@ -63,6 +64,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.compose.material)
 
+    // coil
+    implementation(libs.coil.compose)
+    
     //accompanist
     implementation(libs.accompanist.swiperefresh)
 
