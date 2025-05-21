@@ -46,7 +46,12 @@ android {
 
 dependencies {
     // modules
+    implementation(project(":core:common"))
+    implementation(project(":core:network"))
+    implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
+    implementation(project(":feature:movie"))
+    implementation(project(":feature:settings"))
 
     //hilt
     implementation(libs.dagger.hilt)
