@@ -11,4 +11,7 @@
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
     <string name="search">Search Movie</string>
+    <string name="movie_details">Movie Details</string>
+    <string name="produced_by">Produced by</string>
+    <string name="more_like_this">More Like This</string>
 </resources>

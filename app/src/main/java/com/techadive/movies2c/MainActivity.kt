@@ -1,6 +1,5 @@
 package com.techadive.movies2c
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -15,10 +14,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.techadive.common.AppRoutes
 import com.techadive.designsystem.theme.Movies2cTheme
+import com.techadive.movie.ui.details.MOVIE_ID
+import com.techadive.movie.ui.details.MovieDetailsView
 import com.techadive.movie.ui.search.SearchMovieResultsView
 import com.techadive.movie.ui.search.RecentSearchView
 import com.techadive.movie.ui.search.SEARCH_QUERY
-import com.techadive.movie.viewmodels.HomeViewModel
+import com.techadive.movie.viewmodels.details.MovieDetailsViewModel
+import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.movie.viewmodels.search.RecentSearchViewModel
 import com.techadive.movie.viewmodels.search.SearchMovieResultsViewModel
 import com.techadive.movies2c.ui.dashboard.DashboardView
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val searchMovieResultsViewModel: SearchMovieResultsViewModel by viewModels()
     private val recentSearchViewModel: RecentSearchViewModel by viewModels()
+    private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,8 @@ class MainActivity : ComponentActivity() {
                 MainNavHost(
                     homeViewModel,
                     searchMovieResultsViewModel,
-                    recentSearchViewModel
+                    recentSearchViewModel,
+                    movieDetailsViewModel
                 )
             }
         }
@@ -50,7 +54,8 @@ class MainActivity : ComponentActivity() {
 fun MainNavHost(
     homeViewModel: HomeViewModel,
     searchMovieResultsViewModel: SearchMovieResultsViewModel,
-    recentSearchViewModel: RecentSearchViewModel
+    recentSearchViewModel: RecentSearchViewModel,
+    movieDetailsViewModel: MovieDetailsViewModel
 ) {
     val navController = rememberNavController()
 
@@ -91,7 +96,27 @@ fun MainNavHost(
                 searchMovieResultsViewModel = searchMovieResultsViewModel,
                 back = { navController.navigateUp() },
                 openSearch = { navController.navigateUp() }
+            ) { movieId ->
+                navController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
+            }
+        }
+
+        composable(
+            route = "${AppRoutes.MOVIE_DETAILS.route}/{$MOVIE_ID}",
+            arguments = listOf(
+                navArgument(MOVIE_ID) {
+                    type = NavType.IntType
+                }
             )
+        ) { backStack ->
+            val movieId = backStack.arguments?.getInt(MOVIE_ID)
+
+            MovieDetailsView(
+                movieId,
+                movieDetailsViewModel
+            ) {
+                navController.navigateUp()
+            }
         }
     }
 }

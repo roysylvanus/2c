@@ -1,6 +1,7 @@
-package com.techadive.movie.ui
+package com.techadive.movie.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.techadive.common.R
 import com.techadive.common.getYear
 import com.techadive.common.models.Movie
 import com.techadive.common.roundTo2Dec
@@ -37,7 +39,7 @@ import com.techadive.designsystem.theme.Palette
 import com.techadive.network.utils.ApiUtils
 
 @Composable
-fun MovieCard(movie: Movie) {
+fun MovieCard(movie: Movie, showDetails: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -46,7 +48,11 @@ fun MovieCard(movie: Movie) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(200.dp).clickable {
+                    showDetails(
+                        movie.id
+                    )
+                },
             elevation = CardDefaults.cardElevation()
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -83,7 +89,7 @@ fun MovieCard(movie: Movie) {
                         Spacer(modifier = Modifier.width(5.dp))
 
                         Icon(
-                            painter = painterResource(com.techadive.common.R.drawable.ic_star),
+                            painter = painterResource(R.drawable.ic_star),
                             tint = Palette.orange,
                             contentDescription = "star",
                             modifier = Modifier.size(10.dp)

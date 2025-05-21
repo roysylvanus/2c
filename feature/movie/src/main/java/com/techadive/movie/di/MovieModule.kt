@@ -9,10 +9,14 @@ import com.techadive.data.local.dao.MovieDao
 import com.techadive.data.local.dao.SearchDao
 import com.techadive.movie.repositories.SearchRepository
 import com.techadive.movie.repositories.SearchRepositoryImpl
+import com.techadive.movie.usecases.movies.GetMovieDetailsUseCase
+import com.techadive.movie.usecases.movies.GetMovieDetailsUseCaseImpl
 import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCase
 import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCaseImpl
 import com.techadive.movie.usecases.movies.GetPopularMoviesUseCase
 import com.techadive.movie.usecases.movies.GetPopularMoviesUseCaseImpl
+import com.techadive.movie.usecases.movies.GetRecommendedMoviesUseCase
+import com.techadive.movie.usecases.movies.GetRecommendedMoviesUseCaseImpl
 import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCase
 import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCaseImpl
 import com.techadive.movie.usecases.movies.GetUpcomingMoviesUseCase
@@ -111,4 +115,12 @@ class MovieModule {
     @Provides
     fun provideSSearchKeywordUseCase(searchRepository: SearchRepository): SearchKeywordUseCase =
         SearchKeywordUseCaseImpl(searchRepository)
+
+    @Provides
+    fun provideGetMovieDetailsUseCase(movieRepository: MovieRepository): GetMovieDetailsUseCase =
+        GetMovieDetailsUseCaseImpl(movieRepository)
+
+    @Provides
+    fun provideGetRecommendedMoviesUseCase(movieRepository: MovieRepository): GetRecommendedMoviesUseCase =
+        GetRecommendedMoviesUseCaseImpl(movieRepository)
 }

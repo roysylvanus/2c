@@ -4,68 +4,71 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.techadive.designsystem.theme.Movies2cTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToolbarView(
     title: String? = null,
-    startIcon: IconWithDescription? = null,
+    startIconDescription: String? = null,
+    endIconDescription: String? = null,
+    endIcon: Int? = null,
+    endIconAction: ()-> Unit,
     startIconAction: () -> Unit = {},
+    color: Color = Movies2cTheme.colors.background
 ) {
-    Box(
-        modifier = Modifier
-            .statusBarsPadding()
-            .height(56.dp)
-            .fillMaxWidth()
-            .background(Movies2cTheme.colors.background)
-    ) {
 
-        startIcon?.let {
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 16.dp),
-                onClick = {
-                    startIconAction()
-                }) {
-                Icon(
-                    modifier = Modifier.size(30.dp),
-                    imageVector = startIcon.icon,
-                    contentDescription = stringResource(startIcon.description),
-                    tint = Movies2cTheme.colors.onBackground
+    TopAppBar(
+        title = {
+            title?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Center,
+                    style = Movies2cTheme.typography.h2,
+                    color = Movies2cTheme.colors.onBackground,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
+        },
+        navigationIcon = {
+            startIconDescription?.let {
+                IconButton(onClick = startIconAction) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = startIconDescription,
+                        tint = Movies2cTheme.colors.onBackground
+                    )
+                }
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = color
+        ),
+        actions = {
+            endIcon?.let {
+                IconButton(onClick = endIconAction) {
+                    Icon(
+                        painter = painterResource(endIcon),
+                        contentDescription = endIconDescription,
+                        tint = Movies2cTheme.colors.onBackground
+                    )
+                }
+            }
         }
-
-        title?.let {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = it,
-                textAlign = TextAlign.Center,
-                style = Movies2cTheme.typography.h2,
-                color = Movies2cTheme.colors.onBackground,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
+    )
 }
-
-data class IconWithDescription(
-    val icon: ImageVector,
-    val description: Int,
-)

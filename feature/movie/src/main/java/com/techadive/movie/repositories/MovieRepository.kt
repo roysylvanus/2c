@@ -21,6 +21,7 @@ interface MovieRepository {
     suspend fun getTopRatedMovies(page: Int): Flow<AppResult<MovieList>>
     suspend fun getUpcomingMovies(page: Int): Flow<AppResult<MovieList>>
     suspend fun getMovieDetails(movieId: Int): Flow<AppResult<MovieDetails>>
+    suspend fun getRecommendedMovies(movieId: Int, page: Int): Flow<AppResult<MovieList>>
 }
 
 class MovieRepositoryImpl @Inject constructor(
@@ -165,6 +166,26 @@ class MovieRepositoryImpl @Inject constructor(
                 emit(AppResult.Success(movieDetails))
             } catch (e: Exception) {
                 emit(AppResult.Error(e))
+            }
+        }
+    }
+
+    override suspend fun getRecommendedMovies(movieId: Int, page: Int): Flow<AppResult<MovieList>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieListWithDatesDto = apiService.getRecommendedMovies(
+                    movieId = movieId,
+                    language = languageProvider.getLanguage(),
+                    page = page
+                )
+
+                val movieList = movieListWithDatesDto.convertToMovieList()
+                emit(AppResult.Success(movieList))
+            } catch (e: Exception) {
+                emit(AppResult.Error(e))
+
             }
         }
     }

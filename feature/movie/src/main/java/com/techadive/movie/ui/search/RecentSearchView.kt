@@ -123,7 +123,7 @@ fun RecentSearchItemView(keyword: Keyword, showResults: () -> Unit) {
 }
 
 @Composable
-fun SearchFieldView(
+private fun SearchFieldView(
     query: String,
     back: () -> Unit,
     onValueChange: (String) -> Unit,
@@ -157,7 +157,7 @@ fun SearchFieldView(
                 cursorColor = Movies2cTheme.colors.onBackground,
                 errorLabelColor = Movies2cTheme.colors.error,
                 focusedLabelColor = Movies2cTheme.colors.primary,
-                unfocusedLabelColor = Movies2cTheme.colors.primary,
+                unfocusedLabelColor = Movies2cTheme.colors.onSurface,
                 errorIndicatorColor = Movies2cTheme.colors.error,
                 focusedIndicatorColor = Movies2cTheme.colors.background,
                 unfocusedIndicatorColor = Movies2cTheme.colors.background,

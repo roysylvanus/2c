@@ -37,11 +37,11 @@ fun ReadonlyTextField(
         TextField(
             value = value.orEmpty(),
             onValueChange = onValueChange,
+            textStyle = Movies2cTheme.typography.body4,
             label = {
                 label?.let {
                     Text(
                         text = stringResource(label),
-                        color = Movies2cTheme.colors.primary,
                         style = Movies2cTheme.typography.body4
                     )
                 }
@@ -53,6 +53,7 @@ fun ReadonlyTextField(
                 cursorColor = Movies2cTheme.colors.background,
                 errorLabelColor = Movies2cTheme.colors.error,
                 focusedLabelColor = Movies2cTheme.colors.primary,
+                unfocusedLabelColor = Movies2cTheme.colors.onSurface,
                 errorIndicatorColor = Movies2cTheme.colors.error,
                 focusedIndicatorColor = Movies2cTheme.colors.onBackground,
                 unfocusedIndicatorColor = Movies2cTheme.colors.background,

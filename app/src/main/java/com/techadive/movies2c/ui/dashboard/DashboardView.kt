@@ -8,9 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.techadive.common.AppRoutes
 import com.techadive.designsystem.components.ToolbarView
 import com.techadive.designsystem.theme.Movies2cTheme
-import com.techadive.movie.viewmodels.HomeViewModel
+import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.movies2c.ui.DashboardNavHost
 import com.techadive.movies2c.ui.components.BottomNavView
 
@@ -26,7 +27,12 @@ fun DashboardView(
             .navigationBarsPadding()
             .statusBarsPadding(),
         topBar = {
-            ToolbarView()
+            ToolbarView(
+                endIcon = com.techadive.common.R.drawable.ic_search,
+                endIconAction = {
+                    mainNavController.navigate(AppRoutes.SEARCH.name)
+                }
+            )
         },
         bottomBar = {
             BottomNavView(dashboardNavController)

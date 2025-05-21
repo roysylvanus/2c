@@ -6,5 +6,6 @@ enum class AppRoutes(val route: String) {
     SETTINGS("settings"),
     SEARCH("search"),
     SEARCH_MOVIE_RESULTS("search_movie_results"),
-    DASHBOARD("dashboard")
+    DASHBOARD("dashboard"),
+    MOVIE_DETAILS("movie_details")
 }

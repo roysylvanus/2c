@@ -89,4 +89,11 @@ interface ApiService {
         @Query("query") query: String,
         @Query("page") page: Int = 1
     ): KeywordsListDto
+
+    @GET("movie/{movie_id}/recommendations")
+    suspend fun getRecommendedMovies(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String,
+        @Query("page") page: Int = 1
+    ): MovieListDTO
 }

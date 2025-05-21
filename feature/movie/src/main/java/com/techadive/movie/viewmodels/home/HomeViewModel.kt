@@ -1,4 +1,4 @@
-package com.techadive.movie.viewmodels
+package com.techadive.movie.viewmodels.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
