@@ -6,14 +6,25 @@ import com.techadive.network.api.ApiService
 import com.techadive.common.LanguageProviderImpl
 import com.techadive.common.LanguageProvider
 import com.techadive.data.local.dao.MovieDao
-import com.techadive.movie.usecases.GetNowPlayingMoviesUseCase
-import com.techadive.movie.usecases.GetNowPlayingMoviesUseCaseImpl
-import com.techadive.movie.usecases.GetPopularMoviesUseCase
-import com.techadive.movie.usecases.GetPopularMoviesUseCaseImpl
-import com.techadive.movie.usecases.GetTopRatedMoviesUseCase
-import com.techadive.movie.usecases.GetTopRatedMoviesUseCaseImpl
-import com.techadive.movie.usecases.GetUpcomingMoviesUseCase
-import com.techadive.movie.usecases.GetUpcomingMoviesUseCaseImpl
+import com.techadive.data.local.dao.SearchDao
+import com.techadive.movie.repositories.SearchRepository
+import com.techadive.movie.repositories.SearchRepositoryImpl
+import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCase
+import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCaseImpl
+import com.techadive.movie.usecases.movies.GetPopularMoviesUseCase
+import com.techadive.movie.usecases.movies.GetPopularMoviesUseCaseImpl
+import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCase
+import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCaseImpl
+import com.techadive.movie.usecases.movies.GetUpcomingMoviesUseCase
+import com.techadive.movie.usecases.movies.GetUpcomingMoviesUseCaseImpl
+import com.techadive.movie.usecases.search.DeleteAllRecentSearchHistoryUseCase
+import com.techadive.movie.usecases.search.DeleteAllRecentSearchHistoryUseCaseImpl
+import com.techadive.movie.usecases.search.GetRecentSearchHistoryUseCase
+import com.techadive.movie.usecases.search.GetRecentSearchHistoryUseCaseImpl
+import com.techadive.movie.usecases.search.SearchKeywordUseCase
+import com.techadive.movie.usecases.search.SearchKeywordUseCaseImpl
+import com.techadive.movie.usecases.search.SearchMoviesUseCase
+import com.techadive.movie.usecases.search.SearchMoviesUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -71,4 +82,33 @@ class MovieModule {
         GetNowPlayingMoviesUseCaseImpl(
             movieRepository
         )
+
+    @Singleton
+    @Provides
+    fun provideSearchRepository(
+        searchDao: SearchDao,
+        apiService: ApiService,
+        languageProvider: LanguageProvider
+    ): SearchRepository =
+        SearchRepositoryImpl(
+            searchDao,
+            apiService,
+            languageProvider
+        )
+
+    @Provides
+    fun provideDeleteAllRecentSearchHistoryUseCase(searchRepository: SearchRepository): DeleteAllRecentSearchHistoryUseCase =
+        DeleteAllRecentSearchHistoryUseCaseImpl(searchRepository)
+
+    @Provides
+    fun provideGetRecentSearchHistoryUseCase(searchRepository: SearchRepository): GetRecentSearchHistoryUseCase =
+        GetRecentSearchHistoryUseCaseImpl(searchRepository)
+
+    @Provides
+    fun provideSearchMoviesUseCase(searchRepository: SearchRepository): SearchMoviesUseCase =
+        SearchMoviesUseCaseImpl(searchRepository)
+
+    @Provides
+    fun provideSSearchKeywordUseCase(searchRepository: SearchRepository): SearchKeywordUseCase =
+        SearchKeywordUseCaseImpl(searchRepository)
 }

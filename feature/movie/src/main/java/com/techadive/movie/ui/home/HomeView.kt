@@ -288,13 +288,17 @@ private fun HomeViewSectionHeader(titleResource: Int, seeAllClick: () -> Unit) {
 private fun HorizontalMovieListSection(
     movies: List<Movie>
 ) {
+    val moviesWithPosters = movies.filter { it.posterPath != null }
+
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        items(movies.take(10)) { movie ->
-            MovieCard(movie) // custom composable
+        items(moviesWithPosters.take(10)) { movie ->
+            movie.posterPath?.let {
+                MovieCard(movie) // custom composable
+            }
         }
     }
 }

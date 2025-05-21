@@ -70,7 +70,7 @@ fun MovieCard(movie: Movie) {
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
-                            .background(Movies2cTheme.colors.background) // then background
+                            .background(Movies2cTheme.colors.background.copy(alpha = 0.75f)) // then background
                             .padding(horizontal = 6.dp, vertical = 2.dp), // padding inside bg
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -92,15 +92,17 @@ fun MovieCard(movie: Movie) {
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(Movies2cTheme.colors.background)
-                            .padding(horizontal = 6.dp, vertical = 2.dp),
-                        text = movie.releaseDate.getYear(),
-                        style = Movies2cTheme.typography.body5,
-                        color = Movies2cTheme.colors.onBackground
-                    )
+                    movie.releaseDate?.let {
+                        Text(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Movies2cTheme.colors.background.copy(alpha = 0.75f)) // then background
+                                .padding(horizontal = 6.dp, vertical = 2.dp),
+                            text = it.getYear(),
+                            style = Movies2cTheme.typography.body5,
+                            color = Movies2cTheme.colors.onBackground
+                        )
+                    }
                 }
             }
         }
@@ -110,7 +112,7 @@ fun MovieCard(movie: Movie) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            text = movie.originalTitle,
+            text = movie.originalTitle.orEmpty(),
             style = Movies2cTheme.typography.h5,
             color = Movies2cTheme.colors.onBackground,
             overflow = TextOverflow.Ellipsis,

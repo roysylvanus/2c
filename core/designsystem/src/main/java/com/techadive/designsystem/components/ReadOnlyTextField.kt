@@ -41,20 +41,20 @@ fun ReadonlyTextField(
                 label?.let {
                     Text(
                         text = stringResource(label),
-                        color = Movies2cTheme.colors.onBackground,
+                        color = Movies2cTheme.colors.primary,
                         style = Movies2cTheme.typography.body4
                     )
                 }
             },
             shape = Movies2cTheme.shapes.medium,
             colors = TextFieldDefaults.colors(
-                focusedTextColor = Movies2cTheme.colors.background,
-                unfocusedTextColor = Movies2cTheme.colors.background,
+                focusedTextColor = Movies2cTheme.colors.onBackground,
+                unfocusedTextColor = Movies2cTheme.colors.onBackground,
                 cursorColor = Movies2cTheme.colors.background,
                 errorLabelColor = Movies2cTheme.colors.error,
-                focusedLabelColor = Movies2cTheme.colors.background,
+                focusedLabelColor = Movies2cTheme.colors.primary,
                 errorIndicatorColor = Movies2cTheme.colors.error,
-                focusedIndicatorColor = Movies2cTheme.colors.background,
+                focusedIndicatorColor = Movies2cTheme.colors.onBackground,
                 unfocusedIndicatorColor = Movies2cTheme.colors.background,
                 focusedContainerColor = Movies2cTheme.colors.background,
                 unfocusedContainerColor = Movies2cTheme.colors.background,

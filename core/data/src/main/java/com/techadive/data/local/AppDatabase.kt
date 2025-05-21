@@ -7,14 +7,17 @@ import com.techadive.data.local.converters.DatesConverter
 import com.techadive.data.local.converters.GenreListConverter
 import com.techadive.data.local.converters.MovieListConverter
 import com.techadive.data.local.dao.MovieDao
+import com.techadive.data.local.dao.SearchDao
+import com.techadive.data.local.entities.KeywordEntity
 import com.techadive.data.local.entities.MovieListEntity
 
 @Database(
-    entities = [MovieListEntity::class],
-    version = 1,
+    entities = [MovieListEntity::class, KeywordEntity::class],
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(GenreListConverter::class, DatesConverter::class, MovieListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
+    abstract fun searchDao(): SearchDao
 }

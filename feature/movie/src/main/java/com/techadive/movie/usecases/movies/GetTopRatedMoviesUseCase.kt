@@ -1,4 +1,4 @@
-package com.techadive.movie.usecases
+package com.techadive.movie.usecases.movies
 
 import com.techadive.common.AppResult
 import com.techadive.common.models.MovieList

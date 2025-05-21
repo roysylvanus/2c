@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techadive.common.AppResult
 import com.techadive.common.models.MovieList
-import com.techadive.movie.usecases.GetNowPlayingMoviesUseCase
-import com.techadive.movie.usecases.GetPopularMoviesUseCase
-import com.techadive.movie.usecases.GetTopRatedMoviesUseCase
-import com.techadive.movie.usecases.GetUpcomingMoviesUseCase
+import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCase
+import com.techadive.movie.usecases.movies.GetPopularMoviesUseCase
+import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCase
+import com.techadive.movie.usecases.movies.GetUpcomingMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

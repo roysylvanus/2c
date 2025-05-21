@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.techadive.data.local.AppDatabase
 import com.techadive.data.local.dao.MovieDao
+import com.techadive.data.local.dao.SearchDao
 import com.techadive.data.stores.settings.UiSettingsDataStore
 import dagger.Module
 import dagger.Provides
@@ -32,6 +33,11 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideGitRepositoryDao(database: AppDatabase): MovieDao =
+    fun provideMovieDao(database: AppDatabase): MovieDao =
         database.movieDao()
+
+    @Singleton
+    @Provides
+    fun provideSearchDao(database: AppDatabase): SearchDao =
+        database.searchDao()
 }
