@@ -188,7 +188,10 @@ fun MainNavHost(
             arguments = listOf(
                 navArgument(SEE_ALL) {
                     type = NavType.StringType
-                }
+                },
+                navArgument(EXTRA) {
+                    type = NavType.IntType
+                },
             )
         ) { backStack ->
             val movieListCategory = backStack.arguments?.getString(SEE_ALL)

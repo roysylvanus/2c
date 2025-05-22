@@ -91,7 +91,7 @@ class SeeAllViewModel @Inject constructor(
                         if (extra != null) {
                             fetchRecommendedMovies(extra, page)
                         } else {
-                            TODO()
+
                         }
                     }
                     else -> Unit
@@ -139,6 +139,14 @@ class SeeAllViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun clearList() {
+        _seeAllUIState.update {
+            it.copy(
+                movieList = null
+            )
         }
     }
 
