@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +29,7 @@ import com.techadive.movie.viewmodels.search.RecentSearchViewModel
 import com.techadive.movie.viewmodels.search.SearchMovieResultsViewModel
 import com.techadive.movies2c.ui.dashboard.DashboardView
 import com.techadive.network.utils.ApiUtils
+import com.techadive.settings.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,18 +40,22 @@ class MainActivity : ComponentActivity() {
     private val recentSearchViewModel: RecentSearchViewModel by viewModels()
     private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
     private val favoriteViewModel: FavoritesViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Movies2cTheme {
+            Movies2cTheme(
+                appTheme = settingsViewModel.appTheme.collectAsState().value
+            ) {
                 MainNavHost(
                     homeViewModel,
                     searchMovieResultsViewModel,
                     recentSearchViewModel,
                     movieDetailsViewModel,
                     favoriteViewModel,
+                    settingsViewModel,
                     ::shareUrl
                 )
             }
@@ -95,6 +101,7 @@ fun MainNavHost(
     recentSearchViewModel: RecentSearchViewModel,
     movieDetailsViewModel: MovieDetailsViewModel,
     favoriteViewModel: FavoritesViewModel,
+    settingsViewModel: SettingsViewModel,
     shareUrl: (String, String?) -> Unit,
 ) {
     val navController = rememberNavController()
@@ -104,7 +111,8 @@ fun MainNavHost(
             DashboardView(
                 navController,
                 homeViewModel,
-                favoriteViewModel
+                favoriteViewModel,
+                settingsViewModel
             )
         }
 

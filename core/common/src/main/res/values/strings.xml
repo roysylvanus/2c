@@ -20,4 +20,9 @@
     <string name="share_via">Share Via</string>
     <string name="error_missing_url">Sorry, the url is missing</string>
     <string name="mime_type_text">text/plain</string>
+    <string name="app_theme">App Theme</string>
+    <string name="select_app_theme">Select App Theme</string>
+    <string name="auto">Auto</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
 </resources>

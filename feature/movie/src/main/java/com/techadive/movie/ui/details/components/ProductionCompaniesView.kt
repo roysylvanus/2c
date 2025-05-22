@@ -40,7 +40,7 @@ fun ProductionCompaniesView(companies: List<ProductionCompany>) {
                             modifier = Modifier
                                 .size(40.dp)
                                 .clip(CircleShape)
-                                .background(Movies2cTheme.colors.onBackground),
+                                .background(Movies2cTheme.colors.backgroundVariant),
                         )
                     }
                 }

@@ -17,12 +17,14 @@ import com.techadive.movie.viewmodels.favorites.FavoritesViewModel
 import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.movies2c.ui.DashboardNavHost
 import com.techadive.movies2c.ui.components.BottomNavView
+import com.techadive.settings.viewmodels.SettingsViewModel
 
 @Composable
 fun DashboardView(
     mainNavController: NavController,
     homeViewModel: HomeViewModel,
     favoriteViewModel: FavoritesViewModel,
+    settingsViewModel: SettingsViewModel
 ) {
     val dashboardNavController = rememberNavController()
     Scaffold(
@@ -49,7 +51,8 @@ fun DashboardView(
             innerPadding,
             dashboardNavController,
             homeViewModel,
-            favoriteViewModel
+            favoriteViewModel,
+            settingsViewModel
         )
     }
 }
