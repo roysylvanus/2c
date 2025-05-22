@@ -28,7 +28,7 @@ fun MovieListEntity.convertToMovieList() =
 
 fun MovieList.convertToMovieListEntity() =
     MovieListEntity(
-        category = "",
+        category = category.orEmpty(),
         dates = this.dates,
         page = this.page,
         results = this.results,
