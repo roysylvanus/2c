@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -21,7 +22,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.components.ReadonlyTextField
 import com.techadive.designsystem.theme.Movies2cTheme
@@ -73,7 +76,6 @@ fun SearchMovieResultsView(
         }
     }
 
-
     Scaffold(
         topBar = {
             SearchViewToolBar(
@@ -111,34 +113,40 @@ private fun SearchViewToolBar(
     back: () -> Unit,
     openSearch: () -> Unit,
 ) {
-    TopAppBar(
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Weight makes sure it doesn't take space meant for nav icon
-                ReadonlyTextField(
-                    modifier = Modifier.weight(1f),
-                    value = searchQuery,
-                    label = com.techadive.common.R.string.search,
-                    icon = com.techadive.common.R.drawable.ic_search,
-                    onValueChange = {},
-                    onClick = openSearch
-                )
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = back) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = stringResource(com.techadive.common.R.string.back),
-                    tint = Movies2cTheme.colors.onBackground
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Movies2cTheme.colors.background
+    Surface(
+        tonalElevation = 4.dp,
+        shadowElevation = 4.dp,
+        color = Color.Transparent
+    ) {
+        TopAppBar(
+            title = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // Weight makes sure it doesn't take space meant for nav icon
+                    ReadonlyTextField(
+                        modifier = Modifier.weight(1f),
+                        value = searchQuery,
+                        label = com.techadive.common.R.string.search,
+                        icon = com.techadive.common.R.drawable.ic_search,
+                        onValueChange = {},
+                        onClick = openSearch
+                    )
+                }
+            },
+            navigationIcon = {
+                IconButton(onClick = back) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(com.techadive.common.R.string.back),
+                        tint = Movies2cTheme.colors.onBackground
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Movies2cTheme.colors.background
+            )
         )
-    )
+    }
 }

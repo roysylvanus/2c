@@ -22,11 +22,16 @@ import com.techadive.movie.ui.details.MovieDetailsView
 import com.techadive.movie.ui.search.SearchMovieResultsView
 import com.techadive.movie.ui.search.RecentSearchView
 import com.techadive.movie.ui.search.SEARCH_QUERY
+import com.techadive.movie.ui.seeall.EXTRA
+import com.techadive.movie.ui.seeall.SEE_ALL
+import com.techadive.movie.ui.seeall.SeeAllView
+import com.techadive.movie.utils.getMovieCategory
 import com.techadive.movie.viewmodels.details.MovieDetailsViewModel
 import com.techadive.movie.viewmodels.favorites.FavoritesViewModel
 import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.movie.viewmodels.search.RecentSearchViewModel
 import com.techadive.movie.viewmodels.search.SearchMovieResultsViewModel
+import com.techadive.movie.viewmodels.seeall.SeeAllViewModel
 import com.techadive.movies2c.ui.dashboard.DashboardView
 import com.techadive.network.utils.ApiUtils
 import com.techadive.settings.viewmodels.SettingsViewModel
@@ -41,6 +46,7 @@ class MainActivity : ComponentActivity() {
     private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
     private val favoriteViewModel: FavoritesViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
+    private val seeAllViewModel: SeeAllViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +62,7 @@ class MainActivity : ComponentActivity() {
                     movieDetailsViewModel,
                     favoriteViewModel,
                     settingsViewModel,
+                    seeAllViewModel,
                     ::shareUrl
                 )
             }
@@ -102,6 +109,7 @@ fun MainNavHost(
     movieDetailsViewModel: MovieDetailsViewModel,
     favoriteViewModel: FavoritesViewModel,
     settingsViewModel: SettingsViewModel,
+    seeAllViewModel: SeeAllViewModel,
     shareUrl: (String, String?) -> Unit,
 ) {
     val navController = rememberNavController()
@@ -112,8 +120,10 @@ fun MainNavHost(
                 navController,
                 homeViewModel,
                 favoriteViewModel,
-                settingsViewModel
-            )
+                settingsViewModel,
+            ) { movieCategory ->
+                navController.navigate("${AppRoutes.SEE_ALL.route}/${movieCategory.value}/${0}")
+            }
         }
 
         composable(AppRoutes.SEARCH.route) {
@@ -123,11 +133,6 @@ fun MainNavHost(
                     navController.navigateUp()
                 },
                 showResults = { query ->
-                    Log.d(
-                        "NavigationDebug",
-                        "Navigating to: ${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query"
-                    )
-
                     navController.navigate("${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query")
                 }
             )
@@ -166,12 +171,38 @@ fun MainNavHost(
             MovieDetailsView(
                 movieId = movieId,
                 movieDetailsViewModel = movieDetailsViewModel,
+                seeAll = { movieCategory, movieId ->
+                    navController.navigate("${AppRoutes.SEE_ALL.route}/${movieCategory.value}/${movieId}")
+                },
                 showDetails = { movieId ->
                     navController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
                 },
                 shareUrl = shareUrl
             ) {
                 navController.navigateUp()
+            }
+        }
+
+        composable(
+            route = "${AppRoutes.SEE_ALL.route}/{$SEE_ALL}/{$EXTRA}",
+            arguments = listOf(
+                navArgument(SEE_ALL) {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStack ->
+            val movieListCategory = backStack.arguments?.getString(SEE_ALL)
+            val extra = backStack.arguments?.getInt(EXTRA)
+
+            SeeAllView(
+                movieListCategory = movieListCategory.orEmpty().getMovieCategory(),
+                extra = extra,
+                seeAllViewModel = seeAllViewModel,
+                back = {
+                    navController.navigateUp()
+                }
+            ) { movieId ->
+                navController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
             }
         }
     }

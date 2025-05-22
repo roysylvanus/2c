@@ -37,6 +37,7 @@ import com.techadive.movie.ui.details.components.GenreChips
 import com.techadive.movie.ui.details.components.MovieMetadataSection
 import com.techadive.movie.ui.details.components.ProductionCompaniesView
 import com.techadive.movie.ui.details.components.TopBarWithFade
+import com.techadive.movie.utils.MovieListCategory
 import com.techadive.movie.viewmodels.details.MovieDetailsViewModel
 
 const val MOVIE_ID = "movie_id"
@@ -45,6 +46,7 @@ const val MOVIE_ID = "movie_id"
 fun MovieDetailsView(
     movieId: Int?,
     movieDetailsViewModel: MovieDetailsViewModel,
+    seeAll: (MovieListCategory, Int?) -> Unit,
     showDetails: (Int) -> Unit,
     shareUrl: (String, String?) -> Unit,
     back: () -> Unit,
@@ -145,7 +147,7 @@ fun MovieDetailsView(
                     MoviesSectionHeader(
                         titleResource = com.techadive.common.R.string.recommended,
                     ) {
-
+                        seeAll(MovieListCategory.RECOMMENDED, movieId)
                     }
                     Spacer(modifier = Modifier.height(16.dp))
 

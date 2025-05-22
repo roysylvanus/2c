@@ -16,16 +16,21 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -37,6 +42,7 @@ import com.techadive.common.models.Keyword
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.viewmodels.search.RecentSearchViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecentSearchView(
     recentSearchViewModel: RecentSearchViewModel,
@@ -57,20 +63,33 @@ fun RecentSearchView(
             .navigationBarsPadding()
             .statusBarsPadding(),
         topBar = {
-            SearchFieldView(
-                query = searchUIStateValues.query.orEmpty(),
-                back = {
-                    backClicked()
-                },
-                onValueChange = { query ->
-                    recentSearchViewModel.onEvent(
-                        RecentSearchViewModel.RecentSearchEvent.SearchKeyword(
-                            query
-                        )
+            Surface(
+                tonalElevation = 4.dp,
+                shadowElevation = 4.dp,
+                color = Color.Transparent
+            ) {
+                TopAppBar(
+                    title = {
+                        SearchFieldView(
+                            query = searchUIStateValues.query.orEmpty(),
+                            back = {
+                                backClicked()
+                            },
+                            onValueChange = { query ->
+                                recentSearchViewModel.onEvent(
+                                    RecentSearchViewModel.RecentSearchEvent.SearchKeyword(
+                                        query
+                                    )
+                                )
+                            }
+                        ) { query ->
+                            showResults(query)
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Movies2cTheme.colors.background
                     )
-                }
-            ) { query ->
-                showResults(query)
+                )
             }
         },
         containerColor = Movies2cTheme.colors.background
@@ -129,9 +148,9 @@ private fun SearchFieldView(
     onValueChange: (String) -> Unit,
     showResults: (String) -> Unit,
 ) {
+
     Row(
         modifier = Modifier
-            .statusBarsPadding()
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp),

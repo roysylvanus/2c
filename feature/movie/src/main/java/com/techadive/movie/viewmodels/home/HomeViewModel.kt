@@ -9,6 +9,7 @@ import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCase
 import com.techadive.movie.usecases.movies.GetPopularMoviesUseCase
 import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCase
 import com.techadive.movie.usecases.movies.GetUpcomingMoviesUseCase
+import com.techadive.movie.utils.MovieListCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,7 @@ class HomeViewModel @Inject constructor(
 
     private val _homeUIState = MutableStateFlow(HomeUIState())
     val homeUIState: StateFlow<HomeUIState> get() = _homeUIState
+
     private var favorites = emptyList<Int>()
 
     private suspend fun fetchFavorites() {
@@ -50,9 +52,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchUpcomingMovies() {
+    private suspend fun fetchUpcomingMovies(page: Int = 1) {
         withContext(Dispatchers.IO) {
-            getUpcomingMoviesUseCase.getUpcomingMovies(1).collect { result ->
+            getUpcomingMoviesUseCase.getUpcomingMovies(page).collect { result ->
                 when (result) {
                     is AppResult.Loading -> {
                         _homeUIState.update {
@@ -90,9 +92,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchNowPlayingMovies() {
+    private suspend fun fetchNowPlayingMovies(page: Int = 1) {
         withContext(Dispatchers.IO) {
-            getNowPlayingMoviesUseCase.getNowPlayingMovies(1).collect { result ->
+            getNowPlayingMoviesUseCase.getNowPlayingMovies(page).collect { result ->
                 when (result) {
                     is AppResult.Loading -> {
                         _homeUIState.update {
@@ -126,9 +128,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchTopRatedMovies() {
+    private suspend fun fetchTopRatedMovies(page: Int = 1) {
         withContext(Dispatchers.IO) {
-            getTopRatedMoviesUseCase.getTopRatedMovies(1).collect { result ->
+            getTopRatedMoviesUseCase.getTopRatedMovies(page).collect { result ->
                 when (result) {
                     is AppResult.Loading -> {
                         _homeUIState.update {
@@ -166,9 +168,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchPopularMovies() {
+    private suspend fun fetchPopularMovies(page: Int = 1) {
         withContext(Dispatchers.IO) {
-            getPopularMoviesUseCase.getPopularMovies(1).collect { result ->
+            getPopularMoviesUseCase.getPopularMovies(page).collect { result ->
                 when (result) {
                     is AppResult.Loading -> {
                         _homeUIState.update {
@@ -212,6 +214,6 @@ class HomeViewModel @Inject constructor(
         val upcomingMovieList: MovieList? = null,
         val topRatedMovieList: MovieList? = null,
         val popularMovieList: MovieList? = null,
-        val nowPlayingMovieList: MovieList? = null
+        val nowPlayingMovieList: MovieList? = null,
     )
 }

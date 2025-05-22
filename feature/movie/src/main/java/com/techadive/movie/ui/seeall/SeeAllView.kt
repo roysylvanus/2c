@@ -1,0 +1,120 @@
+package com.techadive.movie.ui.seeall
+
+import android.util.Log
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.techadive.common.models.convertToMovieCardData
+import com.techadive.designsystem.components.ToolbarView
+import com.techadive.designsystem.theme.Movies2cTheme
+import com.techadive.movie.ui.components.MovieCardList
+import com.techadive.movie.utils.MovieListCategory
+import com.techadive.movie.viewmodels.seeall.SeeAllViewModel
+
+const val SEE_ALL = "see_all"
+const val EXTRA = "extra"
+
+@Composable
+fun SeeAllView(
+    movieListCategory: MovieListCategory,
+    extra: Int?,
+    seeAllViewModel: SeeAllViewModel,
+    back: () -> Unit,
+    showDetails: (Int) -> Unit
+) {
+
+    val seeAllUIState = seeAllViewModel.seeAllUIState.collectAsState().value
+    val movieList = seeAllUIState.movieList
+
+    LaunchedEffect(Unit) {
+        seeAllViewModel.fetchListByCategory(movieListCategory, 1, extra)
+    }
+
+    val listState = rememberLazyGridState()
+    val shouldLoadNext = remember {
+        derivedStateOf {
+            val totalItems = listState.layoutInfo.totalItemsCount
+            val lastVisibleIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleIndex >= totalItems - 5 // adjust prefetch threshold if needed
+        }
+    }
+
+    val shouldLoadPrevious = remember {
+        derivedStateOf {
+            val firstVisible = listState.layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
+            firstVisible == 0
+        }
+    }
+
+    LaunchedEffect(shouldLoadNext.value) {
+        if (shouldLoadNext.value == true) {
+            movieList?.let {
+                seeAllViewModel.fetchListByCategory(movieListCategory, it.page + 1)
+            }
+        }
+    }
+
+    LaunchedEffect(shouldLoadPrevious.value) {
+        if (shouldLoadPrevious.value) {
+            movieList?.let {
+                if (it.page > 1) {
+                    seeAllViewModel.fetchListByCategory(
+                        movieListCategory = movieListCategory,
+                        page = it.page
+                    )
+                }
+            }
+        }
+    }
+    Scaffold(
+        topBar = {
+            Surface(
+                tonalElevation = 4.dp,
+                shadowElevation = 4.dp,
+                color = Color.Transparent
+            ) {
+                ToolbarView(
+                    title = stringResource(movieListCategory.titleResource),
+                    startIconDescription = stringResource(com.techadive.common.R.string.back),
+                    startIconAction = {
+                        back()
+                    },
+                    endIconAction = {
+
+                    }
+                )
+            }
+        },
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .statusBarsPadding(),
+        containerColor = Movies2cTheme.colors.background
+    ) { innerPaddingValues ->
+
+        if (movieList != null && movieList.results.isNotEmpty()) {
+            MovieCardList(
+                innerPadding = innerPaddingValues,
+                listState = listState,
+                movieCards = movieList.results.map {
+                    it.convertToMovieCardData()
+                },
+                showDetails = showDetails
+            )
+        }
+    }
+}

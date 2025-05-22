@@ -40,6 +40,7 @@ import com.techadive.common.models.Movie
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.ui.components.HorizontalMovieListSection
 import com.techadive.movie.ui.components.MoviesSectionHeader
+import com.techadive.movie.utils.MovieListCategory
 import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.network.utils.ApiUtils
 import kotlin.math.abs
@@ -48,6 +49,7 @@ import kotlin.math.abs
 fun HomeView(
     innerPaddingValues: PaddingValues,
     homeViewModel: HomeViewModel,
+    seeAll: (MovieListCategory) -> Unit,
     showDetails: (Int) -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -59,8 +61,10 @@ fun HomeView(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = innerPaddingValues.calculateTopPadding(),
-                bottom = innerPaddingValues.calculateBottomPadding() + 16.dp),
+            .padding(
+                top = innerPaddingValues.calculateTopPadding() + 16.dp,
+                bottom = innerPaddingValues.calculateBottomPadding() + 16.dp
+            ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         if (homeUIStateValues.isError) {
@@ -101,7 +105,7 @@ fun HomeView(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                     titleResource = com.techadive.common.R.string.upcoming,
                 ) {
-
+                    seeAll(MovieListCategory.UPCOMING)
                 }
             }
 
@@ -110,7 +114,8 @@ fun HomeView(
                     HorizontalMovieListSection(
                         Modifier.padding(start = 16.dp, end = 16.dp),
                         movies = moviesList.results,
-                        showDetails = showDetails)
+                        showDetails = showDetails
+                    )
                 }
             }
 
@@ -119,7 +124,7 @@ fun HomeView(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                     titleResource = com.techadive.common.R.string.popular,
                 ) {
-
+                    seeAll(MovieListCategory.POPULAR)
                 }
             }
 
@@ -128,7 +133,8 @@ fun HomeView(
                     HorizontalMovieListSection(
                         Modifier.padding(start = 16.dp, end = 16.dp),
                         movies = moviesList.results,
-                        showDetails = showDetails)
+                        showDetails = showDetails
+                    )
                 }
             }
 
@@ -137,7 +143,7 @@ fun HomeView(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                     titleResource = com.techadive.common.R.string.top_rated,
                 ) {
-
+                    seeAll(MovieListCategory.TOP_RATED)
                 }
             }
 
@@ -146,7 +152,8 @@ fun HomeView(
                     HorizontalMovieListSection(
                         Modifier.padding(start = 16.dp, end = 16.dp),
                         movies = moviesList.results,
-                        showDetails = showDetails)
+                        showDetails = showDetails
+                    )
                 }
             }
 

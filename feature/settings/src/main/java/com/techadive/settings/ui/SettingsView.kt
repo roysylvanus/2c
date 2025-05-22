@@ -30,7 +30,9 @@ fun SettingsView(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
+            .padding(top = padding.calculateTopPadding() + 16.dp,
+                bottom = padding.calculateBottomPadding()
+            )
             .padding(horizontal = 16.dp),
     ) {
         val currentTheme = appThemeState.value
