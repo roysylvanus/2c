@@ -1,8 +1,8 @@
 package com.techadive.settings.di
 
 import com.techadive.data.stores.settings.UiSettingsDataStore
-import com.techadive.settings.usecases.GetUserAppThemeUseCase
-import com.techadive.settings.usecases.GetUserAppThemeUseCaseImpl
+import com.techadive.settings.usecases.GetAndUpdateUserAppThemeUseCase
+import com.techadive.settings.usecases.GetAndUpdateUserAppThemeUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +14,6 @@ import javax.inject.Singleton
 class SettingsModule {
     @Provides
     @Singleton
-    fun provideGetUserAppThemeUseCase(uiSettingsDataStore: UiSettingsDataStore): GetUserAppThemeUseCase =
-        GetUserAppThemeUseCaseImpl(uiSettingsDataStore)
+    fun provideGetAndUpdateUserAppThemeUseCase(uiSettingsDataStore: UiSettingsDataStore): GetAndUpdateUserAppThemeUseCase =
+        GetAndUpdateUserAppThemeUseCaseImpl(uiSettingsDataStore)
 }

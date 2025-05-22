@@ -1,4 +1,4 @@
-package com.techadive.common
+package com.techadive.common.utils
 
 import java.time.LocalDate
 import kotlin.math.round

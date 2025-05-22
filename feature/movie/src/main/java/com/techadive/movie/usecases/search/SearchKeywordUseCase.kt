@@ -1,8 +1,8 @@
 package com.techadive.movie.usecases.search
 
-import com.techadive.common.AppResult
+import com.techadive.common.utils.AppResult
 import com.techadive.common.models.KeywordsList
-import com.techadive.movie.repositories.SearchRepository
+import com.techadive.movie.repositories.search.SearchRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

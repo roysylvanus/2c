@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.techadive.common.AppRoutes
+import com.techadive.common.utils.AppRoutes
 import com.techadive.movie.ui.favorites.FavoritesView
 import com.techadive.movie.ui.home.HomeView
 import com.techadive.movie.utils.MovieListCategory

@@ -1,17 +1,17 @@
 package com.techadive.movie.di
 
-import com.techadive.movie.repositories.MovieRepository
-import com.techadive.movie.repositories.MovieRepositoryImpl
+import com.techadive.movie.repositories.movies.MovieRepository
+import com.techadive.movie.repositories.movies.MovieRepositoryImpl
 import com.techadive.network.api.ApiService
-import com.techadive.common.LanguageProviderImpl
-import com.techadive.common.LanguageProvider
+import com.techadive.common.providers.LanguageProviderImpl
+import com.techadive.common.providers.LanguageProvider
 import com.techadive.data.local.dao.FavoritesDao
 import com.techadive.data.local.dao.MovieDao
 import com.techadive.data.local.dao.SearchDao
-import com.techadive.movie.repositories.FavoriteRepository
-import com.techadive.movie.repositories.FavoriteRepositoryImpl
-import com.techadive.movie.repositories.SearchRepository
-import com.techadive.movie.repositories.SearchRepositoryImpl
+import com.techadive.movie.repositories.favorites.FavoriteRepository
+import com.techadive.movie.repositories.favorites.FavoriteRepositoryImpl
+import com.techadive.movie.repositories.search.SearchRepository
+import com.techadive.movie.repositories.search.SearchRepositoryImpl
 import com.techadive.movie.usecases.favorites.AddToFavoritesUseCase
 import com.techadive.movie.usecases.favorites.AddToFavoritesUseCaseImpl
 import com.techadive.movie.usecases.favorites.CheckIfMovieIsFavoriteUseCase

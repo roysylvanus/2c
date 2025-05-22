@@ -1,6 +1,6 @@
 package com.techadive.movie.usecases.favorites
 
-import com.techadive.movie.repositories.FavoriteRepository
+import com.techadive.movie.repositories.favorites.FavoriteRepository
 import javax.inject.Inject
 
 interface CheckIfMovieIsFavoriteUseCase {

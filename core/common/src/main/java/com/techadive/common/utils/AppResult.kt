@@ -1,4 +1,4 @@
-package com.techadive.common
+package com.techadive.common.utils
 
 sealed class AppResult<out T> {
     data class Success<out T>(val data: T) : AppResult<T>()

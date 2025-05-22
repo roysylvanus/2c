@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.techadive.common.AppRoutes
+import com.techadive.common.utils.AppRoutes
 import com.techadive.designsystem.components.ToolbarView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.utils.MovieListCategory

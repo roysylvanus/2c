@@ -36,8 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.techadive.common.AppRoutes
 import com.techadive.common.models.Keyword
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.viewmodels.search.RecentSearchViewModel

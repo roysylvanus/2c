@@ -1,4 +1,4 @@
-package com.techadive.common
+package com.techadive.common.providers
 
 import java.util.Locale
 

@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.techadive.common.AppRoutes
+import com.techadive.common.utils.AppRoutes
 import com.techadive.designsystem.theme.Movies2cTheme
 
 @Composable

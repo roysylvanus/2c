@@ -1,4 +1,4 @@
-package com.techadive.common
+package com.techadive.common.utils
 
 enum class AppRoutes(val route: String) {
     HOME("home"),

@@ -2,7 +2,6 @@ package com.techadive.movies2c
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.techadive.common.AppRoutes
+import com.techadive.common.utils.AppRoutes
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.ui.details.MOVIE_ID
 import com.techadive.movie.ui.details.MovieDetailsView

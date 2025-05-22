@@ -1,6 +1,6 @@
 package com.techadive.movie.usecases.search
 
-import com.techadive.movie.repositories.SearchRepository
+import com.techadive.movie.repositories.search.SearchRepository
 import javax.inject.Inject
 
 interface DeleteAllRecentSearchHistoryUseCase {

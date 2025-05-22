@@ -2,7 +2,7 @@ package com.techadive.movie.viewmodels.seeall
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techadive.common.AppResult
+import com.techadive.common.utils.AppResult
 import com.techadive.common.models.MovieList
 import com.techadive.movie.usecases.favorites.GetFavoritesUseCase
 import com.techadive.movie.usecases.movies.GetPopularMoviesUseCase

@@ -1,8 +1,8 @@
 package com.techadive.movie.usecases.movies
 
-import com.techadive.common.AppResult
+import com.techadive.common.utils.AppResult
 import com.techadive.common.models.MovieList
-import com.techadive.movie.repositories.MovieRepository
+import com.techadive.movie.repositories.movies.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

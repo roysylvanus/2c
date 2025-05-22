@@ -2,14 +2,13 @@ package com.techadive.movie.viewmodels.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techadive.common.AppResult
+import com.techadive.common.utils.AppResult
 import com.techadive.common.models.MovieList
 import com.techadive.movie.usecases.favorites.GetFavoritesUseCase
 import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCase
 import com.techadive.movie.usecases.movies.GetPopularMoviesUseCase
 import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCase
 import com.techadive.movie.usecases.movies.GetUpcomingMoviesUseCase
-import com.techadive.movie.utils.MovieListCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

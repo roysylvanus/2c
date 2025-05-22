@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
-import com.techadive.common.getYear
+import com.techadive.common.R
+import com.techadive.common.utils.getYear
 import com.techadive.common.models.MovieDetails
-import com.techadive.common.roundTo2Dec
+import com.techadive.common.utils.roundTo2Dec
 
 @Composable
 fun MovieMetadataSection(movie: MovieDetails) {
@@ -24,6 +25,6 @@ fun MovieMetadataSection(movie: MovieDetails) {
             text = "${movie.runtime} min"
         )
         movie.releaseDate?.getYear()
-            ?.let { IconText(icon = com.techadive.common.R.drawable.ic_calendar_today, text = it) }
+            ?.let { IconText(icon = R.drawable.ic_calendar_today, text = it) }
     }
 }

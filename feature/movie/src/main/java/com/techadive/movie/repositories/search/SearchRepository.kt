@@ -1,7 +1,7 @@
-package com.techadive.movie.repositories
+package com.techadive.movie.repositories.search
 
-import com.techadive.common.AppResult
-import com.techadive.common.LanguageProvider
+import com.techadive.common.utils.AppResult
+import com.techadive.common.providers.LanguageProvider
 import com.techadive.common.models.KeywordsList
 import com.techadive.common.models.MovieList
 import com.techadive.data.local.dao.SearchDao

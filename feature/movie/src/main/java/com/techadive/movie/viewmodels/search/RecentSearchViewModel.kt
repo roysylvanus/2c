@@ -1,9 +1,8 @@
 package com.techadive.movie.viewmodels.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techadive.common.AppResult
+import com.techadive.common.utils.AppResult
 import com.techadive.common.models.KeywordsList
 import com.techadive.movie.usecases.search.DeleteAllRecentSearchHistoryUseCase
 import com.techadive.movie.usecases.search.GetRecentSearchHistoryUseCase

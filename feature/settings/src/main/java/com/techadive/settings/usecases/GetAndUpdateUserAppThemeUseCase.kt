@@ -4,13 +4,13 @@ import com.techadive.data.stores.settings.AppTheme
 import com.techadive.data.stores.settings.UiSettingsDataStore
 import javax.inject.Inject
 
-interface GetUserAppThemeUseCase {
+interface GetAndUpdateUserAppThemeUseCase {
     var appTheme: AppTheme
 }
 
-class GetUserAppThemeUseCaseImpl @Inject constructor(
+class GetAndUpdateUserAppThemeUseCaseImpl @Inject constructor(
     private val uiSettingsDataStore: UiSettingsDataStore
-) : GetUserAppThemeUseCase {
+) : GetAndUpdateUserAppThemeUseCase {
 
     override var appTheme: AppTheme
         get() = uiSettingsDataStore.appTheme

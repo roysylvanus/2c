@@ -1,4 +1,4 @@
-package com.techadive.movie.repositories
+package com.techadive.movie.repositories.favorites
 
 import com.techadive.common.models.MovieCardData
 import com.techadive.data.local.dao.FavoritesDao
