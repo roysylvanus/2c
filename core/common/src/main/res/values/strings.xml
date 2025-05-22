@@ -26,4 +26,7 @@
     <string name="light">Light</string>
     <string name="dark">Dark</string>
     <string name="something_went_wrong">Something went wrong. Please check your internet then try again shortly!</string>
+    <string name="no_favorites">Sorry, you have no favorite movies yet!</string>
+    <string name="no_results">Sorry, couldn\'t find any movies</string>
+    <string name="no_results_for_query">Sorry couldn\'t find search results for \"%1$s\"</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.techadive.movie.ui.seeall
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.Text
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -11,11 +13,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.techadive.common.models.convertToMovieCardData
+import com.techadive.designsystem.components.InternetErrorView
+import com.techadive.designsystem.components.LoadingView
 import com.techadive.designsystem.components.ToolbarView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.ui.components.MovieCardList
@@ -106,7 +111,19 @@ fun SeeAllView(
         containerColor = Movies2cTheme.colors.background
     ) { innerPaddingValues ->
 
-        if (movieList != null && movieList.results.isNotEmpty()) {
+        if (seeAllUIState.isLoading) {
+            LoadingView(paddingValues = innerPaddingValues)
+        } else if (seeAllUIState.isError) {
+            InternetErrorView(
+                paddingValues = innerPaddingValues,
+                message = stringResource(com.techadive.common.R.string.something_went_wrong)
+            ) {
+                seeAllViewModel.apply {
+                    clearList()
+                    fetchListByCategory(movieListCategory, 1, extra)
+                }
+            }
+        } else if (movieList != null && movieList.results.isNotEmpty()) {
             MovieCardList(
                 innerPadding = innerPaddingValues,
                 listState = listState,
@@ -115,6 +132,15 @@ fun SeeAllView(
                 },
                 showDetails = showDetails
             )
+        } else {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = stringResource(com.techadive.common.R.string.no_results),
+                    style = Movies2cTheme.typography.h3,
+                    color = Movies2cTheme.colors.onBackground
+                )
+            }
         }
     }
 }

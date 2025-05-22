@@ -1,11 +1,13 @@
 package com.techadive.movie.ui.search
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.techadive.common.models.convertToMovieCardData
+import com.techadive.designsystem.components.InternetErrorView
+import com.techadive.designsystem.components.LoadingView
 import com.techadive.designsystem.components.ReadonlyTextField
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.ui.components.MovieCardList
@@ -101,7 +105,16 @@ fun SearchMovieResultsView(
         containerColor = Movies2cTheme.colors.background,
     ) { innerPadding ->
 
-        if (searchResultsUIStateValues.movieList != null) {
+        if (searchResultsUIStateValues.isLoading) {
+            LoadingView(paddingValues = innerPadding)
+        } else if (searchResultsUIStateValues.isError) {
+            InternetErrorView(
+                paddingValues = innerPadding,
+                message = stringResource(com.techadive.common.R.string.something_went_wrong)
+            ) {
+                searchMovieResultsViewModel.searchMovies(query = searchQuery)
+            }
+        } else if (searchResultsUIStateValues.movieList != null && searchResultsUIStateValues.movieList.results.isNotEmpty()) {
             val moviesWithPosters =
                 searchResultsUIStateValues.movieList.results.filter { it.posterPath != null && it.backdropPath != null }
 
@@ -111,6 +124,15 @@ fun SearchMovieResultsView(
                 listState = listState,
                 showDetails = showDetails
             )
+        } else {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = stringResource(com.techadive.common.R.string.no_results_for_query, searchQuery.orEmpty()),
+                    style = Movies2cTheme.typography.h3,
+                    color = Movies2cTheme.colors.onBackground
+                )
+            }
         }
     }
 
