@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.techadive.common.models.ProductionCompany
+import com.techadive.designsystem.components.AppImageView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.network.utils.ApiUtils
 
@@ -33,8 +34,8 @@ fun ProductionCompaniesView(companies: List<ProductionCompany>) {
             companies.forEach { company ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (company.logoPath?.isNotEmpty() == true) {
-                        AsyncImage(
-                            model = ApiUtils.IMAGE_URL + company.logoPath,
+                        AppImageView(
+                            url = ApiUtils.IMAGE_URL + company.logoPath,
                             contentDescription = null,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier

@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.techadive.designsystem.components.AppImageView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.network.utils.ApiUtils
 
@@ -21,8 +22,8 @@ fun BackdropHeaderImage(backdropPath: String?) {
             .fillMaxWidth()
             .height(260.dp)
     ) {
-        AsyncImage(
-            model = ApiUtils.IMAGE_URL + backdropPath,
+        AppImageView(
+            url = ApiUtils.IMAGE_URL + backdropPath,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()

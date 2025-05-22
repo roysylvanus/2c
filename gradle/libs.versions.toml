@@ -27,9 +27,8 @@ turbineVersion = "1.2.0"
 navigationCompose = "2.9.0"
 composeMaterial = "1.8.1"
 jetbrainsKotlinJvm = "2.0.20"
-uiAndroid = "1.8.1"
 accompanistSwipeRefresh = "0.32.0"
-lifecycleViewmodelAndroid = "2.9.0"
+lottieVersion = "6.0.1"
 
 [libraries]
 compose-material = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial"}
@@ -53,7 +52,6 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycleVersion" }
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2Version" }
 retrofitGsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2Version" }
 okhttp3LoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3Version" }
@@ -71,7 +69,7 @@ core-testing = { group = "androidx.arch.core", name = "core-testing", version.re
 code-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVersion" }
 app-cash-turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbineVersion" }
 accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh",version.ref = "accompanistSwipeRefresh" }
-androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

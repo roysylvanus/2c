@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
     implementation(libs.coil.compose)
+    implementation(libs.lottie.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -37,6 +37,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.techadive.common.models.Movie
+import com.techadive.designsystem.components.AppImageView
+import com.techadive.designsystem.components.InternetErrorView
+import com.techadive.designsystem.components.LoadingView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.ui.components.HorizontalMovieListSection
 import com.techadive.movie.ui.components.MoviesSectionHeader
@@ -58,107 +61,117 @@ fun HomeView(
 
     val homeUIStateValues = homeViewModel.homeUIState.collectAsState().value
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                top = innerPaddingValues.calculateTopPadding() + 16.dp,
-                bottom = innerPaddingValues.calculateBottomPadding() + 16.dp
-            ),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        if (homeUIStateValues.isError) {
-
-        } else if (homeUIStateValues.isLoading) {
-
-        } else {
-
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(com.techadive.common.R.string.now_showing),
-                        style = Movies2cTheme.typography.h3,
-                        color = Movies2cTheme.colors.onBackground
-                    )
-                }
+    when {
+        homeUIStateValues.allSectionsFailed -> {
+            InternetErrorView(
+                paddingValues = innerPaddingValues,
+                message = stringResource(com.techadive.common.R.string.something_went_wrong)
+            ) {
+                homeViewModel.fetchHomeViewData()
             }
-
-            item {
-                homeUIStateValues.nowPlayingMovieList?.let { upcomingMovieList ->
-                    NowShowingMovieCarousel(
-                        movies = upcomingMovieList.results,
-                        modifier = Modifier.height(350.dp),
-                        showDetails = showDetails
-                    )
-                }
-            }
-
-            item{
-                Spacer(modifier = Modifier)
-            }
-
-            item {
-                MoviesSectionHeader(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    titleResource = com.techadive.common.R.string.upcoming,
-                ) {
-                    seeAll(MovieListCategory.UPCOMING)
-                }
-            }
-
-            homeUIStateValues.upcomingMovieList?.let { moviesList ->
-                item {
-                    HorizontalMovieListSection(
-                        Modifier.padding(start = 16.dp, end = 16.dp),
-                        movies = moviesList.results,
-                        showDetails = showDetails
-                    )
-                }
-            }
-
-            item {
-                MoviesSectionHeader(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    titleResource = com.techadive.common.R.string.popular,
-                ) {
-                    seeAll(MovieListCategory.POPULAR)
-                }
-            }
-
-            homeUIStateValues.popularMovieList?.let { moviesList ->
-                item {
-                    HorizontalMovieListSection(
-                        Modifier.padding(start = 16.dp, end = 16.dp),
-                        movies = moviesList.results,
-                        showDetails = showDetails
-                    )
-                }
-            }
-
-            item {
-                MoviesSectionHeader(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    titleResource = com.techadive.common.R.string.top_rated,
-                ) {
-                    seeAll(MovieListCategory.TOP_RATED)
-                }
-            }
-
-            homeUIStateValues.topRatedMovieList?.let { moviesList ->
-                item {
-                    HorizontalMovieListSection(
-                        Modifier.padding(start = 16.dp, end = 16.dp),
-                        movies = moviesList.results,
-                        showDetails = showDetails
-                    )
-                }
-            }
-
         }
 
+        homeUIStateValues.allSectionsLoading -> {
+            LoadingView(paddingValues = innerPaddingValues)
+        }
+
+        else -> {
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = innerPaddingValues.calculateTopPadding() + 16.dp,
+                        bottom = innerPaddingValues.calculateBottomPadding() + 16.dp
+                    ),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                if (!homeUIStateValues.nowPlayingState.isError && homeUIStateValues.nowPlayingState.data != null) {
+                    item {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(com.techadive.common.R.string.now_showing),
+                                style = Movies2cTheme.typography.h3,
+                                color = Movies2cTheme.colors.onBackground
+                            )
+                        }
+                    }
+
+                    item {
+                        NowShowingMovieCarousel(
+                            movies = homeUIStateValues.nowPlayingState.data.results,
+                            modifier = Modifier.height(350.dp),
+                            showDetails = showDetails
+                        )
+
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier)
+                }
+                if (!homeUIStateValues.upcomingState.isError && homeUIStateValues.upcomingState.data != null) {
+                    item {
+                        MoviesSectionHeader(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                            titleResource = com.techadive.common.R.string.upcoming,
+                        ) {
+                            seeAll(MovieListCategory.UPCOMING)
+                        }
+                    }
+
+                    item {
+                        HorizontalMovieListSection(
+                            Modifier.padding(start = 16.dp, end = 16.dp),
+                            movies = homeUIStateValues.upcomingState.data.results,
+                            showDetails = showDetails
+                        )
+                    }
+                }
+
+                if (!homeUIStateValues.popularState.isError && homeUIStateValues.popularState.data != null) {
+                    item {
+                        MoviesSectionHeader(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                            titleResource = com.techadive.common.R.string.popular,
+                        ) {
+                            seeAll(MovieListCategory.POPULAR)
+                        }
+                    }
+
+                    item {
+                        HorizontalMovieListSection(
+                            Modifier.padding(start = 16.dp, end = 16.dp),
+                            movies = homeUIStateValues.popularState.data.results,
+                            showDetails = showDetails
+                        )
+
+                    }
+                }
+                if (!homeUIStateValues.topRatedState.isError && homeUIStateValues.topRatedState.data != null) {
+                    item {
+                        MoviesSectionHeader(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                            titleResource = com.techadive.common.R.string.top_rated,
+                        ) {
+                            seeAll(MovieListCategory.TOP_RATED)
+                        }
+                    }
+
+                    item {
+                        HorizontalMovieListSection(
+                            Modifier.padding(start = 16.dp, end = 16.dp),
+                            movies = homeUIStateValues.topRatedState.data.results,
+                            showDetails = showDetails
+                        )
+                    }
+
+                }
+            }
+        }
     }
 }
 
@@ -203,11 +216,8 @@ fun NowShowingMovieCarousel(
                     .background(Color.LightGray)
                     .clickable { showDetails(movie.id) }
             ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(ApiUtils.IMAGE_URL + movie.posterPath)
-                        .crossfade(true)
-                        .build(),
+                AppImageView(
+                    url = ApiUtils.IMAGE_URL + movie.posterPath,
                     contentDescription = movie.title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()

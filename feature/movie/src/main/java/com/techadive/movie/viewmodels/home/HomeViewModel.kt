@@ -12,6 +12,7 @@ import com.techadive.movie.usecases.movies.GetUpcomingMoviesUseCase
 import com.techadive.movie.utils.MovieListCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -30,9 +31,21 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _homeUIState = MutableStateFlow(HomeUIState())
-    val homeUIState: StateFlow<HomeUIState> get() = _homeUIState
+    val homeUIState: StateFlow<HomeUIState> = _homeUIState
 
     private var favorites = emptyList<Int>()
+
+    fun fetchHomeViewData() {
+        viewModelScope.launch {
+            supervisorScope {
+                launch { fetchFavorites() }
+                launch { fetchUpcomingMovies() }
+                launch { fetchNowPlayingMovies() }
+                launch { fetchPopularMovies() }
+                launch { fetchTopRatedMovies() }
+            }
+        }
+    }
 
     private suspend fun fetchFavorites() {
         withContext(Dispatchers.IO) {
@@ -40,167 +53,77 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchHomeViewData() {
-        viewModelScope.launch {
-            supervisorScope {
-                launch { fetchFavorites() }
-                launch { fetchUpcomingMovies() }
-                launch { fetchPopularMovies() }
-                launch { fetchNowPlayingMovies() }
-                launch { fetchTopRatedMovies() }
-            }
-        }
-    }
-
     private suspend fun fetchUpcomingMovies(page: Int = 1) {
-        withContext(Dispatchers.IO) {
-            getUpcomingMoviesUseCase.getUpcomingMovies(page).collect { result ->
-                when (result) {
-                    is AppResult.Loading -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = true,
-                                isError = false
-                            )
-                        }
-                    }
-
-                    is AppResult.Error -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = true
-                            )
-                        }
-                    }
-
-                    is AppResult.Success -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = false,
-                                upcomingMovieList = result.data.copy(
-                                    results = result.data.results.map { movie ->
-                                        movie.copy(isFavorite = favorites.contains(movie.id))
-                                    }
-                                )
-                            )
-                        }
-                    }
-                }
+        fetchSection(
+            fetch = { getUpcomingMoviesUseCase.getUpcomingMovies(page) },
+            onSuccess = { movieList ->
+                movieList.copy(results = movieList.results.map {
+                    it.copy(isFavorite = favorites.contains(it.id))
+                })
+            },
+            updateState = { updated ->
+                this.copy(upcomingState = updated)
             }
-        }
+        )
     }
 
     private suspend fun fetchNowPlayingMovies(page: Int = 1) {
-        withContext(Dispatchers.IO) {
-            getNowPlayingMoviesUseCase.getNowPlayingMovies(page).collect { result ->
-                when (result) {
-                    is AppResult.Loading -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = true,
-                                isError = false
-                            )
-                        }
-                    }
-
-                    is AppResult.Error -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = true
-                            )
-                        }
-                    }
-
-                    is AppResult.Success -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = false,
-                                nowPlayingMovieList = result.data
-                            )
-                        }
-                    }
-                }
+        fetchSection(
+            fetch = { getNowPlayingMoviesUseCase.getNowPlayingMovies(page) },
+            onSuccess = { it },
+            updateState = { updated ->
+                this.copy(nowPlayingState = updated)
             }
-        }
-    }
-
-    private suspend fun fetchTopRatedMovies(page: Int = 1) {
-        withContext(Dispatchers.IO) {
-            getTopRatedMoviesUseCase.getTopRatedMovies(page).collect { result ->
-                when (result) {
-                    is AppResult.Loading -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = true,
-                                isError = false
-                            )
-                        }
-                    }
-
-                    is AppResult.Error -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = true
-                            )
-                        }
-                    }
-
-                    is AppResult.Success -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = false,
-                                topRatedMovieList = result.data.copy(
-                                    results = result.data.results.map { movie ->
-                                        movie.copy(isFavorite = favorites.contains(movie.id))
-                                    }
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        )
     }
 
     private suspend fun fetchPopularMovies(page: Int = 1) {
+        fetchSection(
+            fetch = { getPopularMoviesUseCase.getPopularMovies(page) },
+            onSuccess = { movieList ->
+                movieList.copy(results = movieList.results.map {
+                    it.copy(isFavorite = favorites.contains(it.id))
+                })
+            },
+            updateState = { updated ->
+                this.copy(popularState = updated)
+            }
+        )
+    }
+
+    private suspend fun fetchTopRatedMovies(page: Int = 1) {
+        fetchSection(
+            fetch = { getTopRatedMoviesUseCase.getTopRatedMovies(page) },
+            onSuccess = { movieList ->
+                movieList.copy(results = movieList.results.map {
+                    it.copy(isFavorite = favorites.contains(it.id))
+                })
+            },
+            updateState = { updated ->
+                this.copy(topRatedState = updated)
+            }
+        )
+    }
+
+    private suspend fun <T> fetchSection(
+        fetch: suspend () -> Flow<AppResult<T>>,
+        onSuccess: (T) -> T,
+        updateState: (HomeUIState.(SectionState<T>) -> HomeUIState)
+    ) {
         withContext(Dispatchers.IO) {
-            getPopularMoviesUseCase.getPopularMovies(page).collect { result ->
+            fetch().collect { result ->
                 when (result) {
                     is AppResult.Loading -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = true,
-                                isError = false
-                            )
-                        }
+                        _homeUIState.update {  it.updateState(SectionState(isLoading = true)) }
                     }
 
                     is AppResult.Error -> {
-                        _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = true
-                            )
-                        }
+                        _homeUIState.update {  it.updateState(SectionState(isError = true)) }
                     }
 
                     is AppResult.Success -> {
                         _homeUIState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = false,
-                                popularMovieList = result.data.copy(
-                                    results = result.data.results.map { movie ->
-                                        movie.copy(isFavorite = favorites.contains(movie.id))
-                                    }
-                                )
-                            )
+                            it.updateState(SectionState(data = onSuccess(result.data)))
                         }
                     }
                 }
@@ -208,12 +131,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+
     data class HomeUIState(
+        val upcomingState: SectionState<MovieList> = SectionState(),
+        val topRatedState: SectionState<MovieList> = SectionState(),
+        val popularState: SectionState<MovieList> = SectionState(),
+        val nowPlayingState: SectionState<MovieList> = SectionState(),
+    ) {
+        val allSectionsFailed: Boolean
+            get() = listOf(upcomingState, topRatedState, popularState, nowPlayingState).all { it.isError }
+        val allSectionsLoading: Boolean
+            get() = listOf(upcomingState, topRatedState, popularState, nowPlayingState).all { it.isLoading }
+    }
+
+    data class SectionState<T>(
         val isLoading: Boolean = false,
         val isError: Boolean = false,
-        val upcomingMovieList: MovieList? = null,
-        val topRatedMovieList: MovieList? = null,
-        val popularMovieList: MovieList? = null,
-        val nowPlayingMovieList: MovieList? = null,
+        val data: T? = null
     )
 }

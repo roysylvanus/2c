@@ -25,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -38,6 +40,7 @@ import com.techadive.common.R
 import com.techadive.common.getYear
 import com.techadive.common.models.MovieCardData
 import com.techadive.common.roundTo2Dec
+import com.techadive.designsystem.components.AppImageView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.designsystem.theme.Palette
 import com.techadive.network.utils.ApiUtils
@@ -52,19 +55,23 @@ fun MovieCard(movie: MovieCardData, showDetails: (Int) -> Unit) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp).clickable {
+                .height(200.dp)
+                .clickable {
                     showDetails(
                         movie.movieId
                     )
                 },
             elevation = CardDefaults.cardElevation()
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(ApiUtils.IMAGE_URL + movie.posterPath)
-                        .crossfade(true)
-                        .build(),
+            Box(modifier = Modifier.fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.4f)),
+                        startY = 200f
+                    )
+                )) {
+                AppImageView(
+                    url = ApiUtils.IMAGE_URL + movie.posterPath,
                     contentDescription = movie.originalTitle,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
@@ -115,7 +122,9 @@ fun MovieCard(movie: MovieCardData, showDetails: (Int) -> Unit) {
                 }
 
                 Icon(
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(5.dp),
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(5.dp),
                     imageVector = if (movie.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = stringResource(R.string.favorites),
                     tint = if (movie.isFavorite) Palette.red else
