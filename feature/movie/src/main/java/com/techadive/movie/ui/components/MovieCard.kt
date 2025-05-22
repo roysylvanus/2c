@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -28,14 +29,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.techadive.common.R
 import com.techadive.common.getYear
 import com.techadive.common.models.MovieCardData
@@ -46,7 +44,10 @@ import com.techadive.designsystem.theme.Palette
 import com.techadive.network.utils.ApiUtils
 
 @Composable
-fun MovieCard(movie: MovieCardData, showDetails: (Int) -> Unit) {
+fun MovieCard(
+    movie: MovieCardData,
+    showDetails: (Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -63,13 +64,16 @@ fun MovieCard(movie: MovieCardData, showDetails: (Int) -> Unit) {
                 },
             elevation = CardDefaults.cardElevation()
         ) {
-            Box(modifier = Modifier.fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.4f)),
-                        startY = 200f
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.4f)),
+                            startY = 200f
+                        )
                     )
-                )) {
+            ) {
                 AppImageView(
                     url = ApiUtils.IMAGE_URL + movie.posterPath,
                     contentDescription = movie.originalTitle,
@@ -145,5 +149,19 @@ fun MovieCard(movie: MovieCardData, showDetails: (Int) -> Unit) {
             maxLines = 1,
         )
 
+        Spacer(modifier = Modifier.height(10.dp))
+
+        if (!movie.overview.isNullOrEmpty()) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp),
+                text = movie.overview!!,
+                style = Movies2cTheme.typography.body5,
+                color = Movies2cTheme.colors.onBackground.copy(alpha = 0.7f),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+            )
+        }
     }
 }

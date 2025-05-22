@@ -30,6 +30,7 @@ class FavoriteRepositoryImpl @Inject constructor(
                 originalTitle = favorite.originalTitle,
                 voteAverage = favorite.voteAverage,
                 posterPath = favorite.posterPath,
+                overview = favorite.overview
             )
         )
     }

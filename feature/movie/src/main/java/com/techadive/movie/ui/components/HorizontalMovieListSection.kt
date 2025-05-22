@@ -90,7 +90,7 @@ fun HorizontalMovieListSection(
             movie.posterPath?.let {
                 MovieCard(
                     movie.convertToMovieCardData(),
-                    showDetails
+                    showDetails = showDetails
                 )
             }
         }

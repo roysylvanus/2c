@@ -12,6 +12,7 @@ data class FavoriteEntity(
     val originalTitle: String?,
     val voteAverage: Double,
     val posterPath: String?,
+    val overview: String?
 )
 
 fun FavoriteEntity.convertToFavorite() =
@@ -21,5 +22,6 @@ fun FavoriteEntity.convertToFavorite() =
         originalTitle = originalTitle,
         voteAverage = voteAverage,
         posterPath = posterPath,
-        isFavorite = true
+        isFavorite = true,
+        overview = overview
     )

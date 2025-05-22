@@ -155,7 +155,8 @@ class MovieDetailsViewModel @Inject constructor(
                                 originalTitle = movie.originalTitle,
                                 voteAverage = movie.voteAverage,
                                 posterPath = movie.posterPath,
-                                isFavorite = movie.isFavorite
+                                isFavorite = movie.isFavorite,
+                                overview = movie.overview
                             )
                         )
                     }

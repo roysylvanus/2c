@@ -6,7 +6,8 @@ data class MovieCardData(
     val originalTitle: String?,
     val voteAverage: Double,
     val posterPath: String?,
-    val isFavorite: Boolean
+    val isFavorite: Boolean,
+    val overview: String?
 )
 
 fun Movie.convertToMovieCardData() =
@@ -16,5 +17,6 @@ fun Movie.convertToMovieCardData() =
         originalTitle = originalTitle,
         voteAverage = voteAverage,
         posterPath = posterPath,
-        isFavorite = isFavorite
+        isFavorite = isFavorite,
+        overview = overview
     )
