@@ -1,16 +1,11 @@
 package com.techadive.movie.ui.search
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,13 +17,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.components.ReadonlyTextField
 import com.techadive.designsystem.theme.Movies2cTheme
-import com.techadive.movie.ui.components.MovieCard
+import com.techadive.movie.ui.components.MovieCardList
 import com.techadive.movie.viewmodels.search.SearchMovieResultsViewModel
 
 const val SEARCH_QUERY = "search_query"
@@ -49,6 +46,34 @@ fun SearchMovieResultsView(
         searchMovieResultsViewModel.searchMovies(query = searchQuery)
     }
 
+    val listState = rememberLazyGridState()
+    val shouldLoadNext = remember {
+        derivedStateOf {
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            searchResultsUIStateValues.movieList?.let { lastVisible >= it.page - 2 } // Load next near end
+        }
+    }
+
+    val shouldLoadPrevious = remember {
+        derivedStateOf {
+            val firstVisible = listState.layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
+            firstVisible == 0 // Load previous when scrolling up to top
+        }
+    }
+
+    LaunchedEffect(shouldLoadNext.value) {
+        if (shouldLoadNext.value == true) {
+            searchMovieResultsViewModel.searchMovies(query = searchQuery, page = searchResultsUIStateValues.movieList!!.page)
+        }
+    }
+
+    LaunchedEffect(shouldLoadPrevious.value) {
+        if (shouldLoadPrevious.value) {
+            searchResultsUIStateValues.movieList?.page?.let { searchMovieResultsViewModel.searchMovies(query = searchQuery, page = it) }
+        }
+    }
+
+
     Scaffold(
         topBar = {
             SearchViewToolBar(
@@ -68,19 +93,12 @@ fun SearchMovieResultsView(
             val moviesWithPosters =
                 searchResultsUIStateValues.movieList.results.filter { it.posterPath != null && it.backdropPath != null }
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(moviesWithPosters) { movie ->
-                    MovieCard(movie, showDetails) // custom composable
-                }
-            }
+            MovieCardList(
+                innerPadding = innerPadding,
+                movieCards = moviesWithPosters.map { it.convertToMovieCardData() },
+                listState = listState,
+                showDetails = showDetails
+            )
         }
     }
 

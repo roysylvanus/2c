@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techadive.common.AppResult
+import com.techadive.common.models.MovieCardData
 import com.techadive.common.models.MovieList
+import com.techadive.movie.usecases.favorites.GetFavoritesUseCase
 import com.techadive.movie.usecases.search.SearchMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,19 +20,38 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchMovieResultsViewModel @Inject constructor(
     private val searchMoviesUseCase: SearchMoviesUseCase,
+    private val getFavoritesUseCase: GetFavoritesUseCase
 ) : ViewModel() {
 
     private val _searchMovieResultsUIState = MutableStateFlow(SearchMovieResultsUIState())
     val searchMovieResultsUIState: StateFlow<SearchMovieResultsUIState> get() = _searchMovieResultsUIState
 
-    fun searchMovies(query: String?) {
+    private var favorites = emptyList<Int>()
+
+    private fun fetchFavorites() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+               favorites = getFavoritesUseCase.getFavorites().map { it.movieId }
+            }
+        }
+    }
+
+    fun searchMovies(query: String?, page: Int = 1) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _searchMovieResultsUIState.update {
+                    it.copy(
+                        query = null
+                    )
+                }
+
+                fetchFavorites()
+
                 if (query != null) {
                     searchMoviesUseCase.searchMovies(
                         query = query,
                         includeAdult = false,
-                        page = 1,
+                        page = page,
                     ).collect { result ->
 
                         when (result) {
@@ -45,8 +66,6 @@ class SearchMovieResultsViewModel @Inject constructor(
                             }
 
                             is AppResult.Error -> {
-                                Log.i("_searchMovieResultsUIState", result.error.toString())
-
                                 _searchMovieResultsUIState.update {
                                     it.copy(
                                         isLoading = false,
@@ -56,10 +75,15 @@ class SearchMovieResultsViewModel @Inject constructor(
                             }
 
                             is AppResult.Success -> {
-                                Log.i("_searchMovieResultsUIState", result.data.toString())
+                                val data = result.data
+
                                 _searchMovieResultsUIState.update {
                                     it.copy(
-                                        movieList = result.data,
+                                        movieList = data.copy(
+                                            results = data.results.map { movie ->
+                                                movie.copy(isFavorite = favorites.contains(movie.id))
+                                            }
+                                        ),
                                         isLoading = false,
                                         isError = false
                                     )

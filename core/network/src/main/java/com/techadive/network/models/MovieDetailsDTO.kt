@@ -58,5 +58,6 @@ fun MovieDetailsDTO.convertToMovieDetails() =
         title = this.title,
         video = this.video,
         voteAverage = this.vote_average,
-        voteCount = this.vote_count
+        voteCount = this.vote_count,
+        isFavorite = false
     )

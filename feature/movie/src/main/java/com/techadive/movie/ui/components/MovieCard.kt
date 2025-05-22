@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
@@ -25,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,14 +36,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.techadive.common.R
 import com.techadive.common.getYear
-import com.techadive.common.models.Movie
+import com.techadive.common.models.MovieCardData
 import com.techadive.common.roundTo2Dec
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.designsystem.theme.Palette
 import com.techadive.network.utils.ApiUtils
 
 @Composable
-fun MovieCard(movie: Movie, showDetails: (Int) -> Unit) {
+fun MovieCard(movie: MovieCardData, showDetails: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -50,7 +54,7 @@ fun MovieCard(movie: Movie, showDetails: (Int) -> Unit) {
                 .fillMaxWidth()
                 .height(200.dp).clickable {
                     showDetails(
-                        movie.id
+                        movie.movieId
                     )
                 },
             elevation = CardDefaults.cardElevation()
@@ -61,7 +65,7 @@ fun MovieCard(movie: Movie, showDetails: (Int) -> Unit) {
                         .data(ApiUtils.IMAGE_URL + movie.posterPath)
                         .crossfade(true)
                         .build(),
-                    contentDescription = movie.title,
+                    contentDescription = movie.originalTitle,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -97,19 +101,26 @@ fun MovieCard(movie: Movie, showDetails: (Int) -> Unit) {
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
-
-                    movie.releaseDate?.let {
+                    if (!movie.releaseDate.isNullOrEmpty()) {
                         Text(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(4.dp))
                                 .background(Movies2cTheme.colors.background.copy(alpha = 0.75f)) // then background
                                 .padding(horizontal = 6.dp, vertical = 2.dp),
-                            text = it.getYear(),
+                            text = movie.releaseDate!!.getYear(),
                             style = Movies2cTheme.typography.body5,
                             color = Movies2cTheme.colors.onBackground
                         )
                     }
                 }
+
+                Icon(
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(5.dp),
+                    imageVector = if (movie.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = stringResource(R.string.favorites),
+                    tint = if (movie.isFavorite) Palette.red else
+                        Movies2cTheme.colors.onBackground
+                )
             }
         }
 

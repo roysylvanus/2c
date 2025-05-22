@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techadive.common.AppResult
 import com.techadive.common.models.MovieList
+import com.techadive.movie.usecases.favorites.GetFavoritesUseCase
 import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCase
 import com.techadive.movie.usecases.movies.GetPopularMoviesUseCase
 import com.techadive.movie.usecases.movies.GetTopRatedMoviesUseCase
@@ -23,15 +24,24 @@ class HomeViewModel @Inject constructor(
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase
+    private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
+    private val getFavoritesUseCase: GetFavoritesUseCase,
 ) : ViewModel() {
 
     private val _homeUIState = MutableStateFlow(HomeUIState())
     val homeUIState: StateFlow<HomeUIState> get() = _homeUIState
+    private var favorites = emptyList<Int>()
+
+    private suspend fun fetchFavorites() {
+        withContext(Dispatchers.IO) {
+            favorites = getFavoritesUseCase.getFavorites().map { it.movieId }
+        }
+    }
 
     fun fetchHomeViewData() {
         viewModelScope.launch {
             supervisorScope {
+                launch { fetchFavorites() }
                 launch { fetchUpcomingMovies() }
                 launch { fetchPopularMovies() }
                 launch { fetchNowPlayingMovies() }
@@ -67,7 +77,11 @@ class HomeViewModel @Inject constructor(
                             it.copy(
                                 isLoading = false,
                                 isError = false,
-                                upcomingMovieList = result.data
+                                upcomingMovieList = result.data.copy(
+                                    results = result.data.results.map { movie ->
+                                        movie.copy(isFavorite = favorites.contains(movie.id))
+                                    }
+                                )
                             )
                         }
                     }
@@ -139,7 +153,11 @@ class HomeViewModel @Inject constructor(
                             it.copy(
                                 isLoading = false,
                                 isError = false,
-                                topRatedMovieList = result.data
+                                topRatedMovieList = result.data.copy(
+                                    results = result.data.results.map { movie ->
+                                        movie.copy(isFavorite = favorites.contains(movie.id))
+                                    }
+                                )
                             )
                         }
                     }
@@ -175,7 +193,11 @@ class HomeViewModel @Inject constructor(
                             it.copy(
                                 isLoading = false,
                                 isError = false,
-                                popularMovieList = result.data
+                                popularMovieList = result.data.copy(
+                                    results = result.data.results.map { movie ->
+                                        movie.copy(isFavorite = favorites.contains(movie.id))
+                                    }
+                                )
                             )
                         }
                     }

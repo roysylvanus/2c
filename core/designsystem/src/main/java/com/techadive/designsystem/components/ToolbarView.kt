@@ -15,6 +15,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,7 +27,7 @@ fun ToolbarView(
     title: String? = null,
     startIconDescription: String? = null,
     endIconDescription: String? = null,
-    endIcon: Int? = null,
+    endIcon: ImageVector? = null,
     endIconAction: ()-> Unit,
     startIconAction: () -> Unit = {},
     color: Color = Movies2cTheme.colors.background
@@ -63,7 +64,7 @@ fun ToolbarView(
             endIcon?.let {
                 IconButton(onClick = endIconAction) {
                     Icon(
-                        painter = painterResource(endIcon),
+                        imageVector = endIcon,
                         contentDescription = endIconDescription,
                         tint = Movies2cTheme.colors.onBackground
                     )

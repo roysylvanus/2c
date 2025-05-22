@@ -1,0 +1,29 @@
+package com.techadive.movie.ui.details.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
+import com.techadive.common.getYear
+import com.techadive.common.models.MovieDetails
+import com.techadive.common.roundTo2Dec
+
+@Composable
+fun MovieMetadataSection(movie: MovieDetails) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconText(
+            icon = com.techadive.common.R.drawable.ic_star,
+            text = "${movie.voteAverage.roundTo2Dec()} / 10"
+        )
+        IconText(
+            icon = com.techadive.common.R.drawable.ic_access_time,
+            text = "${movie.runtime} min"
+        )
+        movie.releaseDate?.getYear()
+            ?.let { IconText(icon = com.techadive.common.R.drawable.ic_calendar_today, text = it) }
+    }
+}

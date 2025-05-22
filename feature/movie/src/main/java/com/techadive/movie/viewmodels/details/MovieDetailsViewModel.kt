@@ -4,8 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techadive.common.AppResult
+import com.techadive.common.models.MovieCardData
 import com.techadive.common.models.MovieDetails
 import com.techadive.common.models.MovieList
+import com.techadive.common.toBooleanStrict
+import com.techadive.movie.usecases.favorites.AddToFavoritesUseCase
+import com.techadive.movie.usecases.favorites.CheckIfMovieIsFavoriteUseCase
+import com.techadive.movie.usecases.favorites.RemoveFavoriteUseCase
 import com.techadive.movie.usecases.movies.GetMovieDetailsUseCase
 import com.techadive.movie.usecases.movies.GetRecommendedMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,18 +27,22 @@ import javax.inject.Inject
 class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getRecommendedMoviesUseCase: GetRecommendedMoviesUseCase,
-): ViewModel() {
+    private val checkIfMovieIsFavoriteUseCase: CheckIfMovieIsFavoriteUseCase,
+    private val addToFavoritesUseCase: AddToFavoritesUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
+) : ViewModel() {
 
     private val _movieDetailsUIState = MutableStateFlow(MovieDetailsUIState())
     val movieDetailsUIState: StateFlow<MovieDetailsUIState> get() = _movieDetailsUIState
 
     fun onEvent(event: MovieDetailsEvent) {
-        when(event) {
+        when (event) {
             is MovieDetailsEvent.FetchMovieDetail -> {
                 fetchMovieData(event.movieId)
             }
-            is MovieDetailsEvent.UpdateFavoriteStatus -> {
 
+            is MovieDetailsEvent.UpdateFavoriteStatus -> {
+                updateFavoriteStatus(event.movieId, event.isFavorite)
             }
         }
     }
@@ -41,7 +50,7 @@ class MovieDetailsViewModel @Inject constructor(
     private suspend fun fetchMovieDetails(movieId: Int) {
         withContext(Dispatchers.IO) {
             getMovieDetailsUseCase.getMovieDetails(movieId).collect { result ->
-                when(result) {
+                when (result) {
                     is AppResult.Loading -> {
                         _movieDetailsUIState.update {
                             it.copy(
@@ -51,9 +60,8 @@ class MovieDetailsViewModel @Inject constructor(
                         }
 
                     }
-                    is AppResult.Error -> {
-                        Log.i("_movieDetailsUIState", result.error.toString())
 
+                    is AppResult.Error -> {
                         _movieDetailsUIState.update {
                             it.copy(
                                 isLoading = false,
@@ -61,8 +69,8 @@ class MovieDetailsViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is AppResult.Success -> {
-                        Log.i("_movieDetailsUIState", result.data.toString())
                         _movieDetailsUIState.update {
                             it.copy(
                                 movieDetails = result.data,
@@ -70,6 +78,8 @@ class MovieDetailsViewModel @Inject constructor(
                                 isLoading = false
                             )
                         }
+
+                        checkIfMovieIsFavorite(movieId)
                     }
                 }
             }
@@ -79,11 +89,15 @@ class MovieDetailsViewModel @Inject constructor(
     private fun fetchMovieData(movieId: Int?) {
         viewModelScope.launch {
             supervisorScope {
-                if (movieId !=null) {
+                if (movieId != null) {
                     fetchMovieDetails(movieId)
                     fetchRecommendedMovies(movieId)
                 } else {
-                    TODO()
+                    _movieDetailsUIState.update {
+                        it.copy(
+                            isError = true
+                        )
+                    }
                 }
             }
         }
@@ -93,10 +107,11 @@ class MovieDetailsViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             getRecommendedMoviesUseCase.getRecommendedMovies(movieId = movieId, page = 1)
                 .collect { result ->
-                    when(result) {
+                    when (result) {
                         is AppResult.Error -> {
                             Log.e("fetchRecommendedMovies", result.error.toString())
                         }
+
                         is AppResult.Success -> {
                             _movieDetailsUIState.update {
                                 it.copy(
@@ -104,19 +119,58 @@ class MovieDetailsViewModel @Inject constructor(
                                 )
                             }
                         }
+
                         else -> Unit
                     }
                 }
         }
     }
 
-    private fun updateFavoriteStatus(movieId: String, isFavorite: Boolean) {
+    private fun checkIfMovieIsFavorite(movieId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val isFavorite = checkIfMovieIsFavoriteUseCase.isFavorite(movieId)
 
+                _movieDetailsUIState.update {
+                    it.copy(
+                        movieDetails = _movieDetailsUIState.value.movieDetails?.copy(
+                            isFavorite = isFavorite.toBooleanStrict()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun updateFavoriteStatus(movieId: Int, isFavorite: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                if (isFavorite) {
+                    val movie = _movieDetailsUIState.value.movieDetails
+                    movie?.let {
+                        addToFavoritesUseCase.addToFavorites(
+                            MovieCardData(
+                                movieId = it.id,
+                                releaseDate = movie.releaseDate,
+                                originalTitle = movie.originalTitle,
+                                voteAverage = movie.voteAverage,
+                                posterPath = movie.posterPath,
+                                isFavorite = movie.isFavorite
+                            )
+                        )
+                    }
+                } else {
+                    removeFavoriteUseCase.removeFromFavorites(movieId)
+                }
+                checkIfMovieIsFavorite(movieId)
+            }
+        }
     }
 
     sealed class MovieDetailsEvent {
-        data class FetchMovieDetail(val movieId: Int?): MovieDetailsEvent()
-        data class UpdateFavoriteStatus(val movieId: Int, val isFavorite: Boolean) : MovieDetailsEvent()
+        data class FetchMovieDetail(val movieId: Int?) : MovieDetailsEvent()
+        data class UpdateFavoriteStatus(val movieId: Int, val isFavorite: Boolean) :
+            MovieDetailsEvent()
     }
 
     data class MovieDetailsUIState(

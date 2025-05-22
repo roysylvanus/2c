@@ -5,10 +5,21 @@ import com.techadive.movie.repositories.MovieRepositoryImpl
 import com.techadive.network.api.ApiService
 import com.techadive.common.LanguageProviderImpl
 import com.techadive.common.LanguageProvider
+import com.techadive.data.local.dao.FavoritesDao
 import com.techadive.data.local.dao.MovieDao
 import com.techadive.data.local.dao.SearchDao
+import com.techadive.movie.repositories.FavoriteRepository
+import com.techadive.movie.repositories.FavoriteRepositoryImpl
 import com.techadive.movie.repositories.SearchRepository
 import com.techadive.movie.repositories.SearchRepositoryImpl
+import com.techadive.movie.usecases.favorites.AddToFavoritesUseCase
+import com.techadive.movie.usecases.favorites.AddToFavoritesUseCaseImpl
+import com.techadive.movie.usecases.favorites.CheckIfMovieIsFavoriteUseCase
+import com.techadive.movie.usecases.favorites.CheckIfMovieIsFavoriteUseCaseImpl
+import com.techadive.movie.usecases.favorites.GetFavoritesUseCase
+import com.techadive.movie.usecases.favorites.GetFavoritesUseCaseImpl
+import com.techadive.movie.usecases.favorites.RemoveFavoriteUseCase
+import com.techadive.movie.usecases.favorites.RemoveFavoriteUseCaseImpl
 import com.techadive.movie.usecases.movies.GetMovieDetailsUseCase
 import com.techadive.movie.usecases.movies.GetMovieDetailsUseCaseImpl
 import com.techadive.movie.usecases.movies.GetNowPlayingMoviesUseCase
@@ -123,4 +134,25 @@ class MovieModule {
     @Provides
     fun provideGetRecommendedMoviesUseCase(movieRepository: MovieRepository): GetRecommendedMoviesUseCase =
         GetRecommendedMoviesUseCaseImpl(movieRepository)
+
+    @Singleton
+    @Provides
+    fun provideFavoriteRepository(favoritesDao: FavoritesDao): FavoriteRepository =
+        FavoriteRepositoryImpl(favoritesDao)
+
+    @Provides
+    fun provideAddToFavoritesUseCase(favoriteRepository: FavoriteRepository): AddToFavoritesUseCase =
+        AddToFavoritesUseCaseImpl(favoriteRepository)
+
+    @Provides
+    fun provideCheckIfMovieIsFavoriteUseCase(favoriteRepository: FavoriteRepository): CheckIfMovieIsFavoriteUseCase =
+        CheckIfMovieIsFavoriteUseCaseImpl(favoriteRepository)
+
+    @Provides
+    fun provideGetFavoritesUseCase(favoriteRepository: FavoriteRepository): GetFavoritesUseCase =
+        GetFavoritesUseCaseImpl(favoriteRepository)
+
+    @Provides
+    fun provideRemoveFavoriteUseCase(favoriteRepository: FavoriteRepository): RemoveFavoriteUseCase =
+        RemoveFavoriteUseCaseImpl(favoriteRepository)
 }

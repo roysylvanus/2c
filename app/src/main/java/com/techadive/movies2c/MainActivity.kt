@@ -1,7 +1,9 @@
 package com.techadive.movies2c
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,10 +22,12 @@ import com.techadive.movie.ui.search.SearchMovieResultsView
 import com.techadive.movie.ui.search.RecentSearchView
 import com.techadive.movie.ui.search.SEARCH_QUERY
 import com.techadive.movie.viewmodels.details.MovieDetailsViewModel
+import com.techadive.movie.viewmodels.favorites.FavoritesViewModel
 import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.movie.viewmodels.search.RecentSearchViewModel
 import com.techadive.movie.viewmodels.search.SearchMovieResultsViewModel
 import com.techadive.movies2c.ui.dashboard.DashboardView
+import com.techadive.network.utils.ApiUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +37,7 @@ class MainActivity : ComponentActivity() {
     private val searchMovieResultsViewModel: SearchMovieResultsViewModel by viewModels()
     private val recentSearchViewModel: RecentSearchViewModel by viewModels()
     private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
+    private val favoriteViewModel: FavoritesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +48,43 @@ class MainActivity : ComponentActivity() {
                     homeViewModel,
                     searchMovieResultsViewModel,
                     recentSearchViewModel,
-                    movieDetailsViewModel
+                    movieDetailsViewModel,
+                    favoriteViewModel,
+                    ::shareUrl
                 )
             }
         }
+    }
+
+    private fun shareUrl(movieTitle: String, posterPath: String?) {
+        if (posterPath != null) {
+            val url = ApiUtils.IMAGE_URL + posterPath
+
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = resources.getString(com.techadive.common.R.string.mime_type_text)
+                putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    resources.getString(com.techadive.common.R.string.check_out_the_movie)
+                )
+                putExtra(Intent.EXTRA_TEXT, "$movieTitle \n${url}")
+            }
+            startActivity(
+                Intent.createChooser(
+                    shareIntent,
+                    resources.getString(com.techadive.common.R.string.share_via)
+                )
+            )
+        } else {
+            showToast(com.techadive.common.R.string.error_missing_url)
+        }
+    }
+
+    private fun showToast(messageResource: Int) {
+        Toast.makeText(
+            this,
+            resources.getString(messageResource),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
 
@@ -55,7 +93,9 @@ fun MainNavHost(
     homeViewModel: HomeViewModel,
     searchMovieResultsViewModel: SearchMovieResultsViewModel,
     recentSearchViewModel: RecentSearchViewModel,
-    movieDetailsViewModel: MovieDetailsViewModel
+    movieDetailsViewModel: MovieDetailsViewModel,
+    favoriteViewModel: FavoritesViewModel,
+    shareUrl: (String, String?) -> Unit,
 ) {
     val navController = rememberNavController()
 
@@ -63,7 +103,8 @@ fun MainNavHost(
         composable(AppRoutes.DASHBOARD.route) {
             DashboardView(
                 navController,
-                homeViewModel
+                homeViewModel,
+                favoriteViewModel
             )
         }
 
@@ -74,7 +115,10 @@ fun MainNavHost(
                     navController.navigateUp()
                 },
                 showResults = { query ->
-                    Log.d("NavigationDebug", "Navigating to: ${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query")
+                    Log.d(
+                        "NavigationDebug",
+                        "Navigating to: ${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query"
+                    )
 
                     navController.navigate("${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query")
                 }
@@ -112,8 +156,12 @@ fun MainNavHost(
             val movieId = backStack.arguments?.getInt(MOVIE_ID)
 
             MovieDetailsView(
-                movieId,
-                movieDetailsViewModel
+                movieId = movieId,
+                movieDetailsViewModel = movieDetailsViewModel,
+                showDetails = { movieId ->
+                    navController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
+                },
+                shareUrl = shareUrl
             ) {
                 navController.navigateUp()
             }

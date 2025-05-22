@@ -3,6 +3,7 @@ package com.techadive.data.di
 import android.content.Context
 import androidx.room.Room
 import com.techadive.data.local.AppDatabase
+import com.techadive.data.local.dao.FavoritesDao
 import com.techadive.data.local.dao.MovieDao
 import com.techadive.data.local.dao.SearchDao
 import com.techadive.data.stores.settings.UiSettingsDataStore
@@ -40,4 +41,9 @@ class DataModule {
     @Provides
     fun provideSearchDao(database: AppDatabase): SearchDao =
         database.searchDao()
+
+    @Singleton
+    @Provides
+    fun provideFavoritesDao(database: AppDatabase): FavoritesDao =
+        database.favoritesDao()
 }

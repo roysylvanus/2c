@@ -18,13 +18,20 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.techadive.common.models.Movie
+import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.designsystem.theme.Palette
 
 @Composable
-fun MoviesSectionHeader(modifier: Modifier = Modifier, titleResource: Int, seeAllClick: () -> Unit) {
-    Row(modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween) {
+fun MoviesSectionHeader(
+    modifier: Modifier = Modifier,
+    titleResource: Int,
+    seeAllClick: () -> Unit
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Text(
             modifier = Modifier.alignByBaseline(),
             text = stringResource(titleResource),
@@ -72,7 +79,7 @@ fun HorizontalMovieListSection(
     movies: List<Movie>,
     showDetails: (Int) -> Unit
 ) {
-    val moviesWithPosters = movies.filter { it.posterPath != null && it.backdropPath != null}
+    val moviesWithPosters = movies.filter { it.posterPath != null && it.backdropPath != null }
 
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -81,7 +88,10 @@ fun HorizontalMovieListSection(
     ) {
         items(moviesWithPosters.take(10)) { movie ->
             movie.posterPath?.let {
-                MovieCard(movie, showDetails) // custom composable
+                MovieCard(
+                    movie.convertToMovieCardData(),
+                    showDetails
+                )
             }
         }
     }

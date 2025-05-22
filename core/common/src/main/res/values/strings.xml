@@ -13,5 +13,11 @@
     <string name="search">Search Movie</string>
     <string name="movie_details">Movie Details</string>
     <string name="produced_by">Produced by</string>
-    <string name="more_like_this">More Like This</string>
+    <string name="recommended">Recommended</string>
+    <string name="show_actions">Show Actions</string>
+    <string name="share">Share</string>
+    <string name="check_out_the_movie">Check out this movie!</string>
+    <string name="share_via">Share Via</string>
+    <string name="error_missing_url">Sorry, the url is missing</string>
+    <string name="mime_type_text">text/plain</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.techadive.common.AppRoutes
 import com.techadive.movie.ui.favorites.FavoritesView
 import com.techadive.movie.ui.home.HomeView
+import com.techadive.movie.viewmodels.favorites.FavoritesViewModel
 import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.settings.SettingsView
 
@@ -17,7 +18,8 @@ fun DashboardNavHost(
     mainNavController: NavController,
     innerPadding: PaddingValues,
     dashboardNavController: NavHostController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    favoriteViewModel: FavoritesViewModel,
 ) {
     NavHost(
         navController = dashboardNavController,
@@ -33,7 +35,12 @@ fun DashboardNavHost(
         }
 
         composable(AppRoutes.FAVORITES.route) {
-            FavoritesView(navController = dashboardNavController)
+            FavoritesView(
+                innerPaddingValues = innerPadding,
+                favoriteViewModel = favoriteViewModel,
+            ) { movieId ->
+                mainNavController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
+            }
         }
 
         composable(AppRoutes.SETTINGS.route) {
