@@ -52,8 +52,9 @@ fun SearchMovieResultsView(
     val listState = rememberLazyGridState()
     val shouldLoadNext = remember {
         derivedStateOf {
-            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-            searchResultsUIStateValues.movieList?.let { lastVisible >= it.page - 2 } // Load next near end
+            val totalItems = listState.layoutInfo.totalItemsCount
+            val lastVisibleIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleIndex >= totalItems - 5 // adjust prefetch threshold if needed
         }
     }
 
@@ -66,13 +67,22 @@ fun SearchMovieResultsView(
 
     LaunchedEffect(shouldLoadNext.value) {
         if (shouldLoadNext.value == true) {
-            searchMovieResultsViewModel.searchMovies(query = searchQuery, page = searchResultsUIStateValues.movieList!!.page)
+            searchResultsUIStateValues.movieList?.let {
+                searchMovieResultsViewModel.searchMovies(
+                    query = searchQuery,
+                    page = it.page + 1
+                )
+            }
         }
     }
 
     LaunchedEffect(shouldLoadPrevious.value) {
         if (shouldLoadPrevious.value) {
-            searchResultsUIStateValues.movieList?.page?.let { searchMovieResultsViewModel.searchMovies(query = searchQuery, page = it) }
+            searchResultsUIStateValues.movieList?.page?.let {
+                if (it > 1) {
+                    searchMovieResultsViewModel.searchMovies(query = searchQuery, page = it)
+                }
+            }
         }
     }
 

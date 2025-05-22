@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.collections.distinctBy
+import kotlin.collections.orEmpty
+import kotlin.collections.plus
 
 @HiltViewModel
 class SearchMovieResultsViewModel @Inject constructor(
@@ -75,17 +78,19 @@ class SearchMovieResultsViewModel @Inject constructor(
                             }
 
                             is AppResult.Success -> {
-                                val data = result.data
+                                val newMovies = result.data.results.map {
+                                    it.copy(isFavorite = favorites.contains(it.id))
+                                }
 
-                                _searchMovieResultsUIState.update {
-                                    it.copy(
-                                        movieList = data.copy(
-                                            results = data.results.map { movie ->
-                                                movie.copy(isFavorite = favorites.contains(movie.id))
-                                            }
-                                        ),
+                                _searchMovieResultsUIState.update { currentState ->
+                                    val combined = (currentState.movieList?.results.orEmpty() + newMovies)
+                                        .distinctBy { it.id }
+                                        .takeLast(500)
+
+                                    currentState.copy(
                                         isLoading = false,
-                                        isError = false
+                                        isError = false,
+                                        movieList = result.data.copy(results = combined, page = page),
                                     )
                                 }
                             }
