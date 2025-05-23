@@ -122,12 +122,6 @@ Movie 2C uses a curated set of modern libraries and tools:
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 🌐 API Reference
 
 Powered by [TMDB API](https://developer.themoviedb.org/docs/getting-started).
