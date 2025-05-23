@@ -116,8 +116,7 @@ Movie 2C uses a curated set of modern libraries and tools:
 
 ## 🔒 Security
 
-* API tokens are stored in `secret.properties` and never hardcoded.
-* The file is excluded from version control via `.gitignore`.
+* The Access token is stored in `secret.properties` and never hardcoded.
 
 ---
 
