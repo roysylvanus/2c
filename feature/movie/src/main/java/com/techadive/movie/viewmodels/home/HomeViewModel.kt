@@ -110,20 +110,20 @@ class HomeViewModel @Inject constructor(
         updateState: (HomeUIState.(SectionState<T>) -> HomeUIState)
     ) {
         withContext(Dispatchers.IO) {
+            var cachedData: T? = null
             fetch().collect { result ->
                 when (result) {
                     is AppResult.Loading -> {
-                        _homeUIState.update {  it.updateState(SectionState(isLoading = true)) }
+                        _homeUIState.update { it.updateState(SectionState(isLoading = true, data = cachedData)) }
                     }
-
-                    is AppResult.Error -> {
-                        _homeUIState.update {  it.updateState(SectionState(isError = true)) }
-                    }
-
                     is AppResult.Success -> {
-                        _homeUIState.update {
-                            it.updateState(SectionState(data = onSuccess(result.data)))
-                        }
+                        val transformedData = onSuccess(result.data)
+                        cachedData = transformedData
+                        _homeUIState.update { it.updateState(SectionState(isLoading = false, isError = false, data = transformedData)) }
+                    }
+                    is AppResult.Error -> {
+                        // Keep cached data but mark error
+                        _homeUIState.update { it.updateState(SectionState(isLoading = false, isError = true, data = cachedData)) }
                     }
                 }
             }

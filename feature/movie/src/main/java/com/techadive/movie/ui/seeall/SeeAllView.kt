@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.techadive.common.R
 import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.components.InternetErrorView
 import com.techadive.designsystem.components.LoadingView
@@ -66,7 +67,7 @@ fun SeeAllView(
     }
 
     LaunchedEffect(shouldLoadNext.value) {
-        if (shouldLoadNext.value == true) {
+        if (shouldLoadNext.value) {
             movieList?.let {
                 seeAllViewModel.fetchListByCategory(movieListCategory, it.page + 1)
             }
@@ -111,12 +112,12 @@ fun SeeAllView(
         containerColor = Movies2cTheme.colors.background
     ) { innerPaddingValues ->
 
-        if (seeAllUIState.isLoading) {
-            LoadingView(paddingValues = innerPaddingValues)
-        } else if (seeAllUIState.isError) {
+        if (seeAllUIState.isLoading && movieList?.results.isNullOrEmpty()) {
+            LoadingView(modifier = Modifier.fillMaxSize(), paddingValues = innerPaddingValues)
+        } else if (seeAllUIState.isError && movieList?.results.isNullOrEmpty()) {
             InternetErrorView(
                 paddingValues = innerPaddingValues,
-                message = stringResource(com.techadive.common.R.string.something_went_wrong)
+                message = stringResource(R.string.something_went_wrong)
             ) {
                 seeAllViewModel.apply {
                     clearList()
@@ -124,19 +125,26 @@ fun SeeAllView(
                 }
             }
         } else if (movieList != null && movieList.results.isNotEmpty()) {
-            MovieCardList(
-                innerPadding = innerPaddingValues,
-                listState = listState,
-                movieCards = movieList.results.map {
-                    it.convertToMovieCardData()
-                },
-                showDetails = showDetails
-            )
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                MovieCardList(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    isLoading = seeAllUIState.isError,
+                    isError = seeAllUIState.isError,
+                    innerPadding = innerPaddingValues,
+                    listState = listState,
+                    movieCards = movieList.results.map {
+                        it.convertToMovieCardData()
+                    },
+                    showDetails = showDetails
+                )
+            }
+
         } else {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = stringResource(com.techadive.common.R.string.no_results),
+                    text = stringResource(R.string.no_results),
                     style = Movies2cTheme.typography.h3,
                     color = Movies2cTheme.colors.onBackground
                 )

@@ -28,6 +28,7 @@ import com.techadive.designsystem.R
 
 @Composable
 fun LoadingView(
+    modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
     message: String? = null,
 ) {
@@ -36,8 +37,7 @@ fun LoadingView(
         enter = fadeIn(tween(1000)),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = modifier
                 .background(Movies2cTheme.colors.background)
                 .padding(paddingValues)
         ) {

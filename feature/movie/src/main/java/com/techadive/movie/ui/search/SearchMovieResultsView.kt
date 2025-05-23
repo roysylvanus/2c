@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.components.InternetErrorView
@@ -105,9 +106,9 @@ fun SearchMovieResultsView(
         containerColor = Movies2cTheme.colors.background,
     ) { innerPadding ->
 
-        if (searchResultsUIStateValues.isLoading) {
-            LoadingView(paddingValues = innerPadding)
-        } else if (searchResultsUIStateValues.isError) {
+        if (searchResultsUIStateValues.isLoading && searchResultsUIStateValues.movieList?.results.isNullOrEmpty()) {
+            LoadingView(modifier = Modifier.fillMaxSize(), paddingValues = innerPadding)
+        } else if (searchResultsUIStateValues.isError && searchResultsUIStateValues.movieList?.results.isNullOrEmpty()) {
             InternetErrorView(
                 paddingValues = innerPadding,
                 message = stringResource(com.techadive.common.R.string.something_went_wrong)
@@ -120,6 +121,8 @@ fun SearchMovieResultsView(
 
             MovieCardList(
                 innerPadding = innerPadding,
+                isLoading = searchResultsUIStateValues.isLoading,
+                isError = searchResultsUIStateValues.isError,
                 movieCards = moviesWithPosters.map { it.convertToMovieCardData() },
                 listState = listState,
                 showDetails = showDetails
@@ -127,8 +130,13 @@ fun SearchMovieResultsView(
         } else {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(
-                    modifier = Modifier.align(Alignment.Center),
-                    text = stringResource(com.techadive.common.R.string.no_results_for_query, searchQuery.orEmpty()),
+                    modifier = Modifier.align(Alignment.Center)
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = stringResource(
+                        com.techadive.common.R.string.no_results_for_query,
+                        searchQuery.orEmpty()
+                    ),
                     style = Movies2cTheme.typography.h3,
                     color = Movies2cTheme.colors.onBackground
                 )

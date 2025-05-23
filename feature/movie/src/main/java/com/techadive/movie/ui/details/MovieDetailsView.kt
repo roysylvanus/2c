@@ -76,7 +76,7 @@ fun MovieDetailsView(
             )
     ) {
         if (state.isLoading) {
-            LoadingView(PaddingValues())
+            LoadingView(modifier = Modifier.fillMaxSize(), paddingValues = PaddingValues())
         } else if (state.isError) {
             InternetErrorView(
                 paddingValues = PaddingValues(),

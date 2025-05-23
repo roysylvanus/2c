@@ -62,7 +62,13 @@ fun HomeView(
     val homeUIStateValues = homeViewModel.homeUIState.collectAsState().value
 
     when {
-        homeUIStateValues.allSectionsFailed -> {
+        homeUIStateValues.allSectionsFailed
+                &&
+                homeUIStateValues.topRatedState.data == null
+                &&
+                homeUIStateValues.popularState.data == null
+                && homeUIStateValues.upcomingState.data == null
+                && homeUIStateValues.nowPlayingState.data == null -> {
             InternetErrorView(
                 paddingValues = innerPaddingValues,
                 message = stringResource(com.techadive.common.R.string.something_went_wrong)
@@ -72,7 +78,7 @@ fun HomeView(
         }
 
         homeUIStateValues.allSectionsLoading -> {
-            LoadingView(paddingValues = innerPaddingValues)
+            LoadingView(modifier = Modifier.fillMaxSize(), paddingValues = innerPaddingValues)
         }
 
         else -> {
@@ -86,7 +92,7 @@ fun HomeView(
                     ),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                if (!homeUIStateValues.nowPlayingState.isError && homeUIStateValues.nowPlayingState.data != null) {
+                if (homeUIStateValues.nowPlayingState.data != null) {
                     item {
                         Column(
                             modifier = Modifier.fillMaxWidth(),
@@ -113,7 +119,7 @@ fun HomeView(
                 item {
                     Spacer(modifier = Modifier)
                 }
-                if (!homeUIStateValues.upcomingState.isError && homeUIStateValues.upcomingState.data != null) {
+                if (homeUIStateValues.upcomingState.data != null) {
                     item {
                         MoviesSectionHeader(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
@@ -132,7 +138,7 @@ fun HomeView(
                     }
                 }
 
-                if (!homeUIStateValues.popularState.isError && homeUIStateValues.popularState.data != null) {
+                if (homeUIStateValues.popularState.data != null) {
                     item {
                         MoviesSectionHeader(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
@@ -151,7 +157,7 @@ fun HomeView(
 
                     }
                 }
-                if (!homeUIStateValues.topRatedState.isError && homeUIStateValues.topRatedState.data != null) {
+                if (homeUIStateValues.topRatedState.data != null) {
                     item {
                         MoviesSectionHeader(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp),

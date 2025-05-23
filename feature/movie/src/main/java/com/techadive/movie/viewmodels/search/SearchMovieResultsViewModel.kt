@@ -42,7 +42,8 @@ class SearchMovieResultsViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _searchMovieResultsUIState.update {
                     it.copy(
-                        query = null
+                        query = null,
+                        movieList = null
                     )
                 }
 

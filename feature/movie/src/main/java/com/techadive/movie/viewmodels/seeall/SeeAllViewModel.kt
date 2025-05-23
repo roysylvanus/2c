@@ -1,5 +1,6 @@
 package com.techadive.movie.viewmodels.seeall
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techadive.common.utils.AppResult
@@ -77,6 +78,12 @@ class SeeAllViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 fetchFavorites()
 
+                _seeAllUIState.update {
+                    it.copy(
+                        isError = false
+                    )
+                }
+
                 when(movieListCategory) {
                     MovieListCategory.UPCOMING -> {
                         fetchUpcomingMovies(page)
@@ -114,6 +121,7 @@ class SeeAllViewModel @Inject constructor(
             }
 
             is AppResult.Error -> {
+                Log.e("seeall", result.error.message.toString())
                 _seeAllUIState.update {
                     it.copy(
                         isLoading = false,

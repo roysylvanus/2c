@@ -53,6 +53,7 @@ class MovieRepositoryImpl @Inject constructor(
 
                 if (cachedMovieList != null) {
                     emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                    emit(AppResult.Error(e))
                 } else {
                     emit(AppResult.Error(e))
                 }
@@ -84,6 +85,7 @@ class MovieRepositoryImpl @Inject constructor(
 
                 if (cachedMovieList != null) {
                     emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                    emit(AppResult.Error(e))
                 } else {
                     emit(AppResult.Error(e))
                 }
@@ -115,6 +117,7 @@ class MovieRepositoryImpl @Inject constructor(
 
                 if (cachedMovieList != null) {
                     emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                    emit(AppResult.Error(e))
                 } else {
                     emit(AppResult.Error(e))
                 }
@@ -146,6 +149,7 @@ class MovieRepositoryImpl @Inject constructor(
 
                 if (cachedMovieList != null) {
                     emit(AppResult.Success(cachedMovieList.convertToMovieList()))
+                    emit(AppResult.Error(e))
                 } else {
                     emit(AppResult.Error(e))
                 }
