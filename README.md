@@ -111,8 +111,7 @@ Movie 2C uses a curated set of modern libraries and tools:
 ## 🧪 Testing
 
 * Unit tests with JUnit, Mockito, and Kotlin Coroutines Test
-* UI tests using Espresso and Compose UI Test APIs
-
+  
 ---
 
 ## 🔒 Security
