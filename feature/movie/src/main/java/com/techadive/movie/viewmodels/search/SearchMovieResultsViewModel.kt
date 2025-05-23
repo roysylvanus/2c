@@ -32,7 +32,7 @@ class SearchMovieResultsViewModel @Inject constructor(
     private fun fetchFavorites() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-               favorites = getFavoritesUseCase.getFavorites().map { it.movieId }
+                favorites = getFavoritesUseCase.getFavorites().map { it.movieId }
             }
         }
     }
@@ -82,14 +82,18 @@ class SearchMovieResultsViewModel @Inject constructor(
                                 }
 
                                 _searchMovieResultsUIState.update { currentState ->
-                                    val combined = (currentState.movieList?.results.orEmpty() + newMovies)
-                                        .distinctBy { it.id }
-                                        .takeLast(500)
+                                    val combined =
+                                        (currentState.movieList?.results.orEmpty() + newMovies)
+                                            .distinctBy { it.id }
+                                            .takeLast(500)
 
                                     currentState.copy(
                                         isLoading = false,
                                         isError = false,
-                                        movieList = result.data.copy(results = combined, page = page),
+                                        movieList = result.data.copy(
+                                            results = combined,
+                                            page = page
+                                        ),
                                     )
                                 }
                             }

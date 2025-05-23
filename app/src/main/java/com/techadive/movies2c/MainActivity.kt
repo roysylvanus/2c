@@ -7,32 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.techadive.common.utils.AppRoutes
 import com.techadive.designsystem.theme.Movies2cTheme
-import com.techadive.movie.ui.details.MOVIE_ID
-import com.techadive.movie.ui.details.MovieDetailsView
-import com.techadive.movie.ui.search.recentsearch.RecentSearchList
-import com.techadive.movie.ui.search.results.SearchMovieResultsView
-import com.techadive.movie.ui.search.recentsearch.SearchQueryView
-import com.techadive.movie.ui.search.results.SEARCH_QUERY
-import com.techadive.movie.ui.seeall.EXTRA
-import com.techadive.movie.ui.seeall.SEE_ALL
-import com.techadive.movie.ui.seeall.SeeAllView
-import com.techadive.movie.utils.getMovieCategory
-import com.techadive.movie.viewmodels.details.MovieDetailsViewModel
-import com.techadive.movie.viewmodels.favorites.FavoritesViewModel
-import com.techadive.movie.viewmodels.home.HomeViewModel
-import com.techadive.movie.viewmodels.search.RecentSearchViewModel
-import com.techadive.movie.viewmodels.search.SearchMovieResultsViewModel
-import com.techadive.movie.viewmodels.seeall.SeeAllViewModel
-import com.techadive.movies2c.ui.dashboard.DashboardView
 import com.techadive.network.utils.ApiUtils
 import com.techadive.settings.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,13 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val homeViewModel: HomeViewModel by viewModels()
-    private val searchMovieResultsViewModel: SearchMovieResultsViewModel by viewModels()
-    private val recentSearchViewModel: RecentSearchViewModel by viewModels()
-    private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
-    private val favoriteViewModel: FavoritesViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
-    private val seeAllViewModel: SeeAllViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +26,6 @@ class MainActivity : ComponentActivity() {
                 appTheme = settingsViewModel.appTheme.collectAsState().value
             ) {
                 MainNavHost(
-                    homeViewModel,
-                    searchMovieResultsViewModel,
-                    recentSearchViewModel,
-                    movieDetailsViewModel,
-                    favoriteViewModel,
-                    settingsViewModel,
-                    seeAllViewModel,
                     ::shareUrl
                 )
             }
@@ -98,127 +61,5 @@ class MainActivity : ComponentActivity() {
             resources.getString(messageResource),
             Toast.LENGTH_SHORT
         ).show()
-    }
-}
-
-@Composable
-fun MainNavHost(
-    homeViewModel: HomeViewModel,
-    searchMovieResultsViewModel: SearchMovieResultsViewModel,
-    recentSearchViewModel: RecentSearchViewModel,
-    movieDetailsViewModel: MovieDetailsViewModel,
-    favoriteViewModel: FavoritesViewModel,
-    settingsViewModel: SettingsViewModel,
-    seeAllViewModel: SeeAllViewModel,
-    shareUrl: (String, String?) -> Unit,
-) {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = AppRoutes.DASHBOARD.route) {
-        composable(AppRoutes.DASHBOARD.route) {
-            DashboardView(
-                navController,
-                homeViewModel,
-                favoriteViewModel,
-                settingsViewModel,
-            ) { movieCategory ->
-                navController.navigate("${AppRoutes.SEE_ALL.route}/${movieCategory.value}/${0}")
-            }
-        }
-
-        composable(AppRoutes.SEARCH.route) {
-            SearchQueryView(
-                recentSearchViewModel = recentSearchViewModel,
-                showRecentSearches = {
-                    navController.navigate(AppRoutes.RECENT_SEARCH.route)
-                },
-                backClicked = {
-                    navController.navigateUp()
-                },
-                showResults = { query ->
-                    navController.navigate("${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query")
-                }
-            )
-        }
-
-        composable(AppRoutes.RECENT_SEARCH.route) {
-            RecentSearchList(
-                navController = navController,
-                recentSearchViewModel =recentSearchViewModel,
-            ) { query ->
-                navController.navigate("${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query")
-            }
-        }
-
-        composable(
-            route = "${AppRoutes.SEARCH_MOVIE_RESULTS.route}/{$SEARCH_QUERY}",
-            arguments = listOf(
-                navArgument(SEARCH_QUERY) {
-                    type = NavType.StringType
-                }
-            )
-        ) { backStack ->
-            val searchQuery = backStack.arguments?.getString(SEARCH_QUERY)
-
-            SearchMovieResultsView(
-                searchQuery = searchQuery,
-                searchMovieResultsViewModel = searchMovieResultsViewModel,
-                back = { navController.navigateUp() },
-                openSearch = { navController.navigateUp() }
-            ) { movieId ->
-                navController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
-            }
-        }
-
-        composable(
-            route = "${AppRoutes.MOVIE_DETAILS.route}/{$MOVIE_ID}",
-            arguments = listOf(
-                navArgument(MOVIE_ID) {
-                    type = NavType.IntType
-                }
-            )
-        ) { backStack ->
-            val movieId = backStack.arguments?.getInt(MOVIE_ID)
-
-            MovieDetailsView(
-                movieId = movieId,
-                movieDetailsViewModel = movieDetailsViewModel,
-                seeAll = { movieCategory, movieId ->
-                    navController.navigate("${AppRoutes.SEE_ALL.route}/${movieCategory.value}/${movieId}")
-                },
-                showDetails = { movieId ->
-                    navController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
-                },
-                shareUrl = shareUrl
-            ) {
-                navController.navigateUp()
-            }
-        }
-
-        composable(
-            route = "${AppRoutes.SEE_ALL.route}/{$SEE_ALL}/{$EXTRA}",
-            arguments = listOf(
-                navArgument(SEE_ALL) {
-                    type = NavType.StringType
-                },
-                navArgument(EXTRA) {
-                    type = NavType.IntType
-                },
-            )
-        ) { backStack ->
-            val movieListCategory = backStack.arguments?.getString(SEE_ALL)
-            val extra = backStack.arguments?.getInt(EXTRA)
-
-            SeeAllView(
-                movieListCategory = movieListCategory.orEmpty().getMovieCategory(),
-                extra = extra,
-                seeAllViewModel = seeAllViewModel,
-                back = {
-                    navController.navigateUp()
-                }
-            ) { movieId ->
-                navController.navigate("${AppRoutes.MOVIE_DETAILS.route}/$movieId")
-            }
-        }
     }
 }

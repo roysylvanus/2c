@@ -34,8 +34,8 @@ import com.techadive.designsystem.components.InternetErrorView
 import com.techadive.designsystem.components.LoadingView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.designsystem.theme.Palette
-import com.techadive.movie.ui.components.HorizontalMovieListSection
-import com.techadive.movie.ui.components.MoviesSectionHeader
+import com.techadive.movie.ui.components.moviesectiontile.HorizontalMovieListSection
+import com.techadive.movie.ui.components.moviesectiontile.MoviesSectionHeader
 import com.techadive.movie.ui.details.components.BackdropHeaderImage
 import com.techadive.movie.ui.details.components.GenreChips
 import com.techadive.movie.ui.details.components.MovieMetadataSection
@@ -43,18 +43,21 @@ import com.techadive.movie.ui.details.components.ProductionCompaniesView
 import com.techadive.movie.ui.details.components.TopBarWithFade
 import com.techadive.movie.utils.MovieListCategory
 import com.techadive.movie.viewmodels.details.MovieDetailsViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.techadive.common.R
 
 const val MOVIE_ID = "movie_id"
 
 @Composable
 fun MovieDetailsView(
     movieId: Int?,
-    movieDetailsViewModel: MovieDetailsViewModel,
     seeAll: (MovieListCategory, Int?) -> Unit,
     showDetails: (Int) -> Unit,
     shareUrl: (String, String?) -> Unit,
     back: () -> Unit,
 ) {
+    val movieDetailsViewModel: MovieDetailsViewModel = hiltViewModel()
+
     val state = movieDetailsViewModel.movieDetailsUIState.collectAsState().value
     val movieDetails = state.movieDetails
     val scrollState = rememberScrollState()
@@ -163,7 +166,7 @@ fun MovieDetailsView(
 
                     if (state.movieList != null && state.movieList.results.isNotEmpty()) {
                         MoviesSectionHeader(
-                            titleResource = com.techadive.common.R.string.recommended,
+                            titleResource = R.string.recommended,
                         ) {
                             seeAll(MovieListCategory.RECOMMENDED, movieId)
                         }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.techadive.designsystem.components.ToolbarView
 import com.techadive.designsystem.theme.Movies2cTheme
@@ -23,10 +24,12 @@ import com.techadive.movie.viewmodels.search.RecentSearchViewModel
 @Composable
 fun RecentSearchList(
     navController: NavController,
-    recentSearchViewModel: RecentSearchViewModel,
     showResults: (String) -> Unit,
 ) {
-    val recentSearches = recentSearchViewModel.recentSearchUIState.collectAsState().value.recentKeywords?.results
+    val recentSearchViewModel: RecentSearchViewModel = hiltViewModel()
+
+    val recentSearches =
+        recentSearchViewModel.recentSearchUIState.collectAsState().value.recentKeywords?.results
     Scaffold(
         topBar = {
             ToolbarView(
@@ -39,7 +42,8 @@ fun RecentSearchList(
                     TextButton(onClick = {
                         recentSearchViewModel.onEvent(RecentSearchViewModel.RecentSearchEvent.DeleteAllRecentSearchHistory)
                     }) {
-                        Text(text = stringResource(com.techadive.common.R.string.clear),
+                        Text(
+                            text = stringResource(com.techadive.common.R.string.clear),
                             style = Movies2cTheme.typography.label,
                             color = Movies2cTheme.colors.onBackground
                         )

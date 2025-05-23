@@ -15,6 +15,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
+/**
+ * Repository implementation for fetching movies and movie details from
+ * [ApiService] with caching support via [MovieDao].
+ *
+ * Handles network errors gracefully by returning cached data when available,
+ * emitting loading and error states wrapped in [AppResult].
+ */
+
 interface MovieRepository {
     suspend fun getNowPlayingMovies(page: Int): Flow<AppResult<MovieList>>
     suspend fun getPopularMovies(page: Int): Flow<AppResult<MovieList>>
@@ -29,6 +37,10 @@ class MovieRepositoryImpl @Inject constructor(
     private val languageProvider: LanguageProvider,
     private val movieDao: MovieDao
 ) : MovieRepository {
+
+    /**
+     * Fetches "Now Playing, Upcoming, Top Rated and Popular" movies from the API, caches them, and falls back to cache on error.
+     */
     override suspend fun getNowPlayingMovies(page: Int): Flow<AppResult<MovieList>> {
         return flow {
             emit(AppResult.Loading)
@@ -156,24 +168,9 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
     }
-
-    override suspend fun getMovieDetails(movieId: Int): Flow<AppResult<MovieDetails>> {
-        return flow {
-            emit(AppResult.Loading)
-
-            try {
-                val movieDetails = apiService.getMovieDetails(
-                    movieId = movieId,
-                    language = languageProvider.getLanguage(),
-                ).convertToMovieDetails()
-
-                emit(AppResult.Success(movieDetails))
-            } catch (e: Exception) {
-                emit(AppResult.Error(e))
-            }
-        }
-    }
-
+    /**
+     * Fetches recommended movies by movie ID.
+     */
     override suspend fun getRecommendedMovies(movieId: Int, page: Int): Flow<AppResult<MovieList>> {
         return flow {
             emit(AppResult.Loading)
@@ -190,6 +187,26 @@ class MovieRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
                 emit(AppResult.Error(e))
 
+            }
+        }
+    }
+
+    /**
+     * Fetches detailed info for a movie by ID.
+     */
+    override suspend fun getMovieDetails(movieId: Int): Flow<AppResult<MovieDetails>> {
+        return flow {
+            emit(AppResult.Loading)
+
+            try {
+                val movieDetails = apiService.getMovieDetails(
+                    movieId = movieId,
+                    language = languageProvider.getLanguage(),
+                ).convertToMovieDetails()
+
+                emit(AppResult.Success(movieDetails))
+            } catch (e: Exception) {
+                emit(AppResult.Error(e))
             }
         }
     }

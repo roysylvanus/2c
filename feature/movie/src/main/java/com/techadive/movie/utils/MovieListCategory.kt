@@ -12,11 +12,11 @@ enum class MovieListCategory(val value: String, val titleResource: Int) {
 }
 
 fun String.getMovieCategory(): MovieListCategory =
-    when(this) {
+    when (this) {
         MovieListCategory.TOP_RATED.value -> MovieListCategory.TOP_RATED
         MovieListCategory.POPULAR.value -> MovieListCategory.POPULAR
         MovieListCategory.NOW_PLAYING.value -> MovieListCategory.NOW_PLAYING
         MovieListCategory.UPCOMING.value -> MovieListCategory.UPCOMING
         MovieListCategory.RECOMMENDED.value -> MovieListCategory.RECOMMENDED
-        else  -> MovieListCategory.NONE
+        else -> MovieListCategory.NONE
     }

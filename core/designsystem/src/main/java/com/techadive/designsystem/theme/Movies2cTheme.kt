@@ -9,13 +9,14 @@ import com.techadive.designsystem.theme.Palette.darkBlue
 import com.techadive.designsystem.theme.Palette.darkGrey
 import com.techadive.designsystem.theme.Palette.darkGreyA9
 import com.techadive.designsystem.theme.Palette.darkOrange
-import com.techadive.designsystem.theme.Palette.grey
-import com.techadive.designsystem.theme.Palette.lightDarkGrey
 import com.techadive.designsystem.theme.Palette.lightGrey
 import com.techadive.designsystem.theme.Palette.orange
 import com.techadive.designsystem.theme.Palette.red
 import com.techadive.designsystem.theme.Palette.white
 
+/**
+ * Defines the color palette for the Movies2C app's light theme.
+ */
 val LightThemeColors by lazy {
     Movies2cColor(
         primary = orange,
@@ -35,6 +36,9 @@ val LightThemeColors by lazy {
     )
 }
 
+/**
+ * Defines the color palette for the Movies2C app's dark theme.
+ */
 val DarkThemeColors by lazy {
     Movies2cColor(
         primary = darkOrange,
@@ -54,6 +58,9 @@ val DarkThemeColors by lazy {
     )
 }
 
+/**
+ * Accessor object to expose colors, typography, and shapes via CompositionLocals.
+ */
 object Movies2cTheme {
     val colors: Movies2cColor
         @Composable
@@ -67,6 +74,13 @@ object Movies2cTheme {
         @Composable
         get() = LocalMovies2cShapes.current
 }
+/**
+ * Applies the Movies2C theme to [content], selecting light or dark colors
+ * based on [appTheme] or system settings.
+ *
+ * @param appTheme The current app theme mode to apply.
+ * @param content The composable content to style with the theme.
+ */
 
 @Composable
 fun Movies2cTheme(appTheme: AppTheme = AppTheme.MODE_AUTO, content: @Composable () -> Unit) {

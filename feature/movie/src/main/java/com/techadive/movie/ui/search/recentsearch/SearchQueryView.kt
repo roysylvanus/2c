@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.techadive.common.R
 import com.techadive.common.models.Keyword
 import com.techadive.designsystem.theme.Movies2cTheme
@@ -52,13 +53,13 @@ import com.techadive.movie.viewmodels.search.RecentSearchViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchQueryView(
-    recentSearchViewModel: RecentSearchViewModel,
     showRecentSearches: () -> Unit,
     backClicked: () -> Unit,
     showResults: (String?) -> Unit,
 ) {
+    val recentSearchViewModel: RecentSearchViewModel = hiltViewModel()
+
     val searchUIStateValues = recentSearchViewModel.recentSearchUIState.collectAsState().value
-    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         recentSearchViewModel.onEvent(

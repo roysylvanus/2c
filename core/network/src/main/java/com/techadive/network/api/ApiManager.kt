@@ -1,5 +1,6 @@
 package com.techadive.network.api
 
+import com.techadive.network.BuildConfig
 import com.techadive.network.retrofit.RetrofitInstance
 import com.techadive.network.utils.ApiUtils
 import javax.inject.Inject
@@ -15,7 +16,7 @@ class ApiManager @Inject constructor(
     val restApiService: ApiService by lazy {
         retrofitInstance.createRetrofitClient(
             baseUrl = ApiUtils.BASE_URL,
-            accessToken = ApiUtils.ACCESS_TOKEN
+            accessToken = BuildConfig.TMDB_ACCESS_TOKEN
         )
             .create(ApiService::class.java)
     }

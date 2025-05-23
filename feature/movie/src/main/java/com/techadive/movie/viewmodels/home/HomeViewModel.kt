@@ -120,16 +120,41 @@ class HomeViewModel @Inject constructor(
             fetch().collect { result ->
                 when (result) {
                     is AppResult.Loading -> {
-                        _homeUIState.update { it.updateState(SectionState(isLoading = true, data = cachedData)) }
+                        _homeUIState.update {
+                            it.updateState(
+                                SectionState(
+                                    isLoading = true,
+                                    data = cachedData
+                                )
+                            )
+                        }
                     }
+
                     is AppResult.Success -> {
                         val transformedData = onSuccess(result.data)
                         cachedData = transformedData
-                        _homeUIState.update { it.updateState(SectionState(isLoading = false, isError = false, data = transformedData)) }
+                        _homeUIState.update {
+                            it.updateState(
+                                SectionState(
+                                    isLoading = false,
+                                    isError = false,
+                                    data = transformedData
+                                )
+                            )
+                        }
                     }
+
                     is AppResult.Error -> {
                         // Keep cached data but mark error
-                        _homeUIState.update { it.updateState(SectionState(isLoading = false, isError = true, data = cachedData)) }
+                        _homeUIState.update {
+                            it.updateState(
+                                SectionState(
+                                    isLoading = false,
+                                    isError = true,
+                                    data = cachedData
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -145,9 +170,19 @@ class HomeViewModel @Inject constructor(
         val nowPlayingState: SectionState<MovieList> = SectionState(),
     ) {
         val allSectionsFailed: Boolean
-            get() = listOf(upcomingState, topRatedState, popularState, nowPlayingState).all { it.isError }
+            get() = listOf(
+                upcomingState,
+                topRatedState,
+                popularState,
+                nowPlayingState
+            ).all { it.isError }
         val allSectionsLoading: Boolean
-            get() = listOf(upcomingState, topRatedState, popularState, nowPlayingState).all { it.isLoading }
+            get() = listOf(
+                upcomingState,
+                topRatedState,
+                popularState,
+                nowPlayingState
+            ).all { it.isLoading }
     }
 
     data class SectionState<T>(

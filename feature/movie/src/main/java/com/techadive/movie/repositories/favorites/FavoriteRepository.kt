@@ -5,7 +5,10 @@ import com.techadive.data.local.dao.FavoritesDao
 import com.techadive.data.local.entities.FavoriteEntity
 import com.techadive.data.local.entities.convertToFavorite
 import javax.inject.Inject
-
+/**
+ * Implementation of [FavoriteRepository] that uses [FavoritesDao] to persist
+ * and retrieve favorite movies from the local database.
+ */
 interface FavoriteRepository {
     suspend fun getFavorites(): List<MovieCardData>
     suspend fun addToFavorites(favorite: MovieCardData)

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.techadive.common.R
 import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.components.InternetErrorView
@@ -28,17 +29,16 @@ import com.techadive.movie.ui.components.MovieCardList
 import com.techadive.movie.utils.MovieListCategory
 import com.techadive.movie.viewmodels.seeall.SeeAllViewModel
 
-const val SEE_ALL = "see_all"
-const val EXTRA = "extra"
+const val MOVIE_LIST_CATEGORY = "movie_list_category"
 
 @Composable
 fun SeeAllView(
     movieListCategory: MovieListCategory,
     extra: Int?,
-    seeAllViewModel: SeeAllViewModel,
     back: () -> Unit,
     showDetails: (Int) -> Unit
 ) {
+    val seeAllViewModel: SeeAllViewModel = hiltViewModel()
 
     val seeAllUIState = seeAllViewModel.seeAllUIState.collectAsState().value
     val movieList = seeAllUIState.movieList

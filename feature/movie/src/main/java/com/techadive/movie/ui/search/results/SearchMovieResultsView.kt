@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.techadive.common.R
 import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.components.InternetErrorView
@@ -42,11 +43,11 @@ const val SEARCH_QUERY = "search_query"
 @Composable
 fun SearchMovieResultsView(
     searchQuery: String?,
-    searchMovieResultsViewModel: SearchMovieResultsViewModel,
     back: () -> Unit,
     openSearch: () -> Unit,
     showDetails: (Int) -> Unit,
 ) {
+    val searchMovieResultsViewModel: SearchMovieResultsViewModel = hiltViewModel()
 
     val searchResultsUIStateValues =
         searchMovieResultsViewModel.searchMovieResultsUIState.collectAsState().value
@@ -131,7 +132,8 @@ fun SearchMovieResultsView(
         } else {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier
+                        .align(Alignment.Center)
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     text = stringResource(

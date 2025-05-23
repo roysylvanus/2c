@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":core:designsystem"))
 
     //hilt
+    implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt)
     kapt(libs.hilt.compiler)
 

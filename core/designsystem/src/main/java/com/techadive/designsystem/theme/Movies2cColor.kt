@@ -19,7 +19,8 @@ data class Movies2cColor(
     val onBackground: Color,
     val onSurface: Color,
     val onError: Color,
-    val description:Color
+    val description: Color
 )
 
-internal val LocalMovies2cColors = staticCompositionLocalOf<Movies2cColor> { error("No Movies2cColors provided") }
+internal val LocalMovies2cColors =
+    staticCompositionLocalOf<Movies2cColor> { error("No Movies2cColors provided") }

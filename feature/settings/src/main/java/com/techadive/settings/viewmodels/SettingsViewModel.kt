@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val getUserAppThemeUseCase: GetAndUpdateUserAppThemeUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _appTheme = MutableStateFlow(getUserAppThemeUseCase.appTheme)
     val appTheme: StateFlow<AppTheme> get() = _appTheme

@@ -1,5 +1,9 @@
 package com.techadive.common.utils
 
+/**
+ * Defines app navigation routes used in the NavHost.
+ */
+
 enum class AppRoutes(val route: String) {
     HOME("home"),
     FAVORITES("favorites"),

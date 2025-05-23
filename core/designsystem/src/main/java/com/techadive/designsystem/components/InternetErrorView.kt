@@ -33,7 +33,8 @@ import com.techadive.designsystem.R
 fun InternetErrorView(
     paddingValues: PaddingValues,
     message: String, isActionAble: Boolean = true,
-    refresh: () -> Unit) {
+    refresh: () -> Unit
+) {
 
     Box(
         modifier = Modifier
@@ -42,10 +43,13 @@ fun InternetErrorView(
             .padding(paddingValues)
     ) {
 
-        Column(modifier = Modifier.fillMaxWidth()
-            .align(Alignment.Center),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             val composition by
             rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.lottie_error))
 

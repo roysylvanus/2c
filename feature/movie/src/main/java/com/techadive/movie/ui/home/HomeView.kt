@@ -31,20 +31,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.techadive.common.R
 import com.techadive.common.models.Movie
 import com.techadive.designsystem.components.AppImageView
 import com.techadive.designsystem.components.InternetErrorView
 import com.techadive.designsystem.components.LoadingView
 import com.techadive.designsystem.theme.Movies2cTheme
-import com.techadive.movie.ui.components.HorizontalMovieListSection
-import com.techadive.movie.ui.components.MoviesSectionHeader
+import com.techadive.movie.ui.components.moviesectiontile.HorizontalMovieListSection
+import com.techadive.movie.ui.components.moviesectiontile.MoviesSectionHeader
 import com.techadive.movie.utils.MovieListCategory
 import com.techadive.movie.viewmodels.home.HomeViewModel
 import com.techadive.network.utils.ApiUtils
@@ -53,10 +52,10 @@ import kotlin.math.abs
 @Composable
 fun HomeView(
     innerPaddingValues: PaddingValues,
-    homeViewModel: HomeViewModel,
     seeAll: (MovieListCategory) -> Unit,
     showDetails: (Int) -> Unit
 ) {
+    val homeViewModel: HomeViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
         homeViewModel.fetchHomeViewData()
     }
@@ -84,7 +83,8 @@ fun HomeView(
         }
 
         else -> {
-            val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = homeUIStateValues.isRefreshing)
+            val swipeRefreshState =
+                rememberSwipeRefreshState(isRefreshing = homeUIStateValues.isRefreshing)
 
             SwipeRefresh(
                 state = swipeRefreshState,
@@ -131,7 +131,7 @@ fun HomeView(
                         item {
                             MoviesSectionHeader(
                                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                                titleResource = com.techadive.common.R.string.upcoming,
+                                titleResource = R.string.upcoming,
                             ) {
                                 seeAll(MovieListCategory.UPCOMING)
                             }
@@ -150,7 +150,7 @@ fun HomeView(
                         item {
                             MoviesSectionHeader(
                                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                                titleResource = com.techadive.common.R.string.popular,
+                                titleResource = R.string.popular,
                             ) {
                                 seeAll(MovieListCategory.POPULAR)
                             }
@@ -169,7 +169,7 @@ fun HomeView(
                         item {
                             MoviesSectionHeader(
                                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                                titleResource = com.techadive.common.R.string.top_rated,
+                                titleResource = R.string.top_rated,
                             ) {
                                 seeAll(MovieListCategory.TOP_RATED)
                             }

@@ -20,4 +20,5 @@ data class Movies2cShape(
     val extraLarge: Shape,
 )
 
-internal val LocalMovies2cShapes = staticCompositionLocalOf<Movies2cShape> { error("No Movies2cShapes provided") }
+internal val LocalMovies2cShapes =
+    staticCompositionLocalOf<Movies2cShape> { error("No Movies2cShapes provided") }

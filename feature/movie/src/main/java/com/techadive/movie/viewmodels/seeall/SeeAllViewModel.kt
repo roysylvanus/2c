@@ -84,16 +84,19 @@ class SeeAllViewModel @Inject constructor(
                     )
                 }
 
-                when(movieListCategory) {
+                when (movieListCategory) {
                     MovieListCategory.UPCOMING -> {
                         fetchUpcomingMovies(page)
                     }
+
                     MovieListCategory.TOP_RATED -> {
                         fetchTopRatedMovies(page)
                     }
+
                     MovieListCategory.POPULAR -> {
                         fetchPopularMovies(page)
                     }
+
                     MovieListCategory.RECOMMENDED -> {
                         if (extra != null) {
                             fetchRecommendedMovies(extra, page)
@@ -101,11 +104,13 @@ class SeeAllViewModel @Inject constructor(
 
                         }
                     }
+
                     else -> Unit
                 }
             }
         }
     }
+
     private fun handleMovieFetchResult(
         result: AppResult<MovieList>,
         page: Int

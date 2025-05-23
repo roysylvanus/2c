@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.techadive.common.R
 import com.techadive.common.utils.getYear
 import com.techadive.common.models.MovieDetails
-import com.techadive.common.utils.roundTo2Dec
+import com.techadive.common.utils.roundTo1Dec
 
 @Composable
 fun MovieMetadataSection(movie: MovieDetails) {
@@ -17,11 +17,11 @@ fun MovieMetadataSection(movie: MovieDetails) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconText(
-            icon = com.techadive.common.R.drawable.ic_star,
-            text = "${movie.voteAverage.roundTo2Dec()} / 10"
+            icon = R.drawable.ic_star,
+            text = "${movie.voteAverage.roundTo1Dec()} / 10"
         )
         IconText(
-            icon = com.techadive.common.R.drawable.ic_access_time,
+            icon = R.drawable.ic_access_time,
             text = "${movie.runtime} min"
         )
         movie.releaseDate?.getYear()

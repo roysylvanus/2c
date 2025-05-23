@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.ui.components.MovieCardList
 import com.techadive.movie.viewmodels.favorites.FavoritesViewModel
@@ -18,9 +19,9 @@ import com.techadive.movie.viewmodels.favorites.FavoritesViewModel
 @Composable
 fun FavoritesView(
     innerPaddingValues: PaddingValues,
-    favoriteViewModel: FavoritesViewModel,
     showDetails: (Int) -> Unit
 ) {
+    val favoriteViewModel: FavoritesViewModel = hiltViewModel()
 
     val favoritesUIStateValues = favoriteViewModel.favoritesUIState.collectAsState().value
     val listState = rememberLazyGridState()

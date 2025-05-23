@@ -30,12 +30,20 @@ interface SearchRepository {
     suspend fun deleteAllRecentSearchHistory()
 }
 
+/**
+ * Repository responsible for handling movie and keyword searches,
+ * including local recent search history caching.
+ */
 class SearchRepositoryImpl @Inject constructor(
     private val searchDao: SearchDao,
     private val apiService: ApiService,
     private val languageProvider: LanguageProvider,
-
     ) : SearchRepository {
+
+    /**
+     * Searches movies remotely with given query and adult content filter,
+     * updates recent search history on success.
+     */
     override suspend fun searchMovies(
         query: String,
         includeAdult: Boolean,
@@ -54,6 +62,7 @@ class SearchRepositoryImpl @Inject constructor(
 
                 emit(AppResult.Success(movieList.convertToMovieList()))
 
+                // Save or update recent search history after successful search
                 addOrdUpdateRecentSearch(query)
             } catch (e: Exception) {
                 emit(AppResult.Error(e))
@@ -61,6 +70,9 @@ class SearchRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Searches keywords remotely.
+     */
     override suspend fun searchKeyword(
         query: String,
         page: Int
@@ -81,6 +93,9 @@ class SearchRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Fetches recent search keywords from local cache.
+     */
     override suspend fun getRecentSearchHistory(): Flow<AppResult<KeywordsList>> {
         return flow {
             emit(AppResult.Loading)
@@ -107,10 +122,16 @@ class SearchRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Deletes all recent search entries from local cache.
+     */
     override suspend fun deleteAllRecentSearchHistory() {
         searchDao.deleteAllRecentSearchHistory()
     }
 
+    /**
+     * Inserts or updates a recent search entry with the current timestamp.
+     */
     private suspend fun addOrdUpdateRecentSearch(query: String) {
         searchDao.addOrUpdateRecentSearch(
             KeywordEntity(

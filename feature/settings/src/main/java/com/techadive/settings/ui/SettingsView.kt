@@ -13,24 +13,28 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.techadive.data.stores.settings.AppTheme
 import com.techadive.designsystem.theme.Movies2cTheme
+import com.techadive.settings.viewmodels.SettingsViewModel
 
 @Composable
 fun SettingsView(
     padding: PaddingValues,
-    appThemeState: State<AppTheme>,
-    updateTheme: (AppTheme) -> Unit
 ) {
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
+    val appThemeState = settingsViewModel.appTheme.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = padding.calculateTopPadding() + 16.dp,
+            .padding(
+                top = padding.calculateTopPadding() + 16.dp,
                 bottom = padding.calculateBottomPadding()
             )
             .padding(horizontal = 16.dp),
@@ -54,22 +58,28 @@ fun SettingsView(
 
         AppThemSettingsOption(
             com.techadive.common.R.string.auto,
-            currentTheme, AppTheme.MODE_AUTO, updateTheme
-        )
+            currentTheme, AppTheme.MODE_AUTO
+        ) { appTheme ->
+            settingsViewModel.updateAppTheme(appTheme)
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         AppThemSettingsOption(
             com.techadive.common.R.string.light,
-            currentTheme, AppTheme.MODE_LIGHT, updateTheme
-        )
+            currentTheme, AppTheme.MODE_LIGHT
+        ) { appTheme ->
+            settingsViewModel.updateAppTheme(appTheme)
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         AppThemSettingsOption(
             com.techadive.common.R.string.dark,
-            currentTheme, AppTheme.MODE_DARK, updateTheme
-        )
+            currentTheme, AppTheme.MODE_DARK
+        ) { appTheme ->
+            settingsViewModel.updateAppTheme(appTheme)
+        }
     }
 }
 

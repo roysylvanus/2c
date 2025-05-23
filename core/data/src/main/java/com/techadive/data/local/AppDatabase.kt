@@ -13,6 +13,12 @@ import com.techadive.data.local.entities.FavoriteEntity
 import com.techadive.data.local.entities.KeywordEntity
 import com.techadive.data.local.entities.MovieListEntity
 
+/**
+ * Room database for the Movies2C app.
+ *
+ * Contains DAOs for movies, search queries, and favorites.
+ * Uses custom TypeConverters for handling complex data types like genres and date ranges.
+ */
 @Database(
     entities = [MovieListEntity::class, KeywordEntity::class, FavoriteEntity::class],
     version = 2,

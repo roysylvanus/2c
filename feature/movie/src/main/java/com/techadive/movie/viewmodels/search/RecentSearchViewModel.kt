@@ -22,19 +22,21 @@ class RecentSearchViewModel @Inject constructor(
     private val searchKeywordUseCase: SearchKeywordUseCase,
     private val getRecentSearchHistoryUseCase: GetRecentSearchHistoryUseCase,
     private val deleteAllRecentSearchHistoryUseCase: DeleteAllRecentSearchHistoryUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _recentSearchUIState = MutableStateFlow(RecentSearchUIState())
     val recentSearchUIState: StateFlow<RecentSearchUIState> get() = _recentSearchUIState
 
     fun onEvent(event: RecentSearchEvent) {
-        when(event) {
+        when (event) {
             is RecentSearchEvent.SearchKeyword -> {
                 searchKeyword(event.query)
             }
+
             is RecentSearchEvent.GetRecentSearchHistory -> {
                 getRecentSearchHistory()
             }
+
             is RecentSearchEvent.DeleteAllRecentSearchHistory -> {
                 deleteAllRecentSearchHistory()
             }
@@ -50,13 +52,16 @@ class RecentSearchViewModel @Inject constructor(
                     )
                 }
                 getRecentSearchHistoryUseCase.getRecentSearchHistory().collect { result ->
-                    when(result) {
+                    when (result) {
                         is AppResult.Loading -> {
                             _recentSearchUIState.update {
-                                it.copy(isLoading = true,
-                                    isError = false)
+                                it.copy(
+                                    isLoading = true,
+                                    isError = false
+                                )
                             }
                         }
+
                         is AppResult.Error -> {
                             _recentSearchUIState.update {
                                 it.copy(

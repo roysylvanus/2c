@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.techadive.common.R
 import com.techadive.common.utils.getYear
 import com.techadive.common.models.MovieCardData
-import com.techadive.common.utils.roundTo2Dec
+import com.techadive.common.utils.roundTo1Dec
 import com.techadive.designsystem.components.AppImageView
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.designsystem.theme.Palette
@@ -98,7 +98,7 @@ fun MovieCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = movie.voteAverage.roundTo2Dec().toString(),
+                            text = movie.voteAverage.roundTo1Dec().toString(),
                             style = Movies2cTheme.typography.body5,
                             color = Movies2cTheme.colors.onBackground
                         )

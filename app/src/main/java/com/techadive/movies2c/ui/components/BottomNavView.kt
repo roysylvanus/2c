@@ -67,8 +67,16 @@ fun BottomNavView(
 
 val appBottomNavItems = listOf(
     AppBottomNavItem(com.techadive.common.R.string.home, AppRoutes.HOME.route, Icons.Filled.Home),
-    AppBottomNavItem(com.techadive.common.R.string.favorites, AppRoutes.FAVORITES.route, Icons.Filled.Favorite),
-    AppBottomNavItem(com.techadive.common.R.string.settings, AppRoutes.SETTINGS.route, Icons.Filled.Settings)
+    AppBottomNavItem(
+        com.techadive.common.R.string.favorites,
+        AppRoutes.FAVORITES.route,
+        Icons.Filled.Favorite
+    ),
+    AppBottomNavItem(
+        com.techadive.common.R.string.settings,
+        AppRoutes.SETTINGS.route,
+        Icons.Filled.Settings
+    )
 )
 
 data class AppBottomNavItem(

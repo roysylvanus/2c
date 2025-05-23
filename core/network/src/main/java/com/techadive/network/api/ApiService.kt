@@ -90,6 +90,10 @@ interface ApiService {
         @Query("page") page: Int = 1
     ): KeywordsListDto
 
+    /**
+     * Endpoint to fetch recommended movies by movie id
+     * **/
+
     @GET("movie/{movie_id}/recommendations")
     suspend fun getRecommendedMovies(
         @Path("movie_id") movieId: Int,
