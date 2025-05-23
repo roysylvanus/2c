@@ -4,36 +4,39 @@ import com.techadive.data.stores.settings.AppTheme
 import com.techadive.data.stores.settings.UiSettingsDataStore
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.*
 
-class GetAndUpdateUserAppThemeUseCaseImplTest {
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
-    @Mock
-    private lateinit var mockUiSettingsDataStore: UiSettingsDataStore
+import kotlin.test.assertEquals
+
+class GetAndUpdateUserAppThemeUseCaseTest {
+
+    private lateinit var uiSettingsDataStore: UiSettingsDataStore
     private lateinit var useCase: GetAndUpdateUserAppThemeUseCaseImpl
 
+    private val themeFlow = MutableStateFlow(AppTheme.MODE_AUTO)
+
     @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        useCase = GetAndUpdateUserAppThemeUseCaseImpl(mockUiSettingsDataStore)
+    fun setup() {
+        uiSettingsDataStore = mock()
+        whenever(uiSettingsDataStore.appThemeFlow).thenReturn(themeFlow)
+
+        useCase = GetAndUpdateUserAppThemeUseCaseImpl(uiSettingsDataStore)
     }
 
     @Test
-    fun `appTheme getter should return value from UiSettingsDataStore`() {
-        whenever(mockUiSettingsDataStore.appTheme).thenReturn(AppTheme.MODE_DARK)
-
-        val result = useCase.appTheme
-
-        assert(result == AppTheme.MODE_DARK)
-        verify(mockUiSettingsDataStore).appTheme
+    fun `appThemeFlow returns dataStore flow`() = runBlocking {
+        val flow = useCase.appThemeFlow
+        assertEquals(AppTheme.MODE_AUTO, flow.first())
     }
 
     @Test
-    fun `appTheme setter should update value in UiSettingsDataStore`() {
-        useCase.appTheme = AppTheme.MODE_LIGHT
+    fun `updateAppTheme sets appTheme on dataStore`() = runBlocking {
+        useCase.updateAppTheme(AppTheme.MODE_DARK)
 
-        verify(mockUiSettingsDataStore).appTheme = AppTheme.MODE_LIGHT
+        verify(uiSettingsDataStore).appTheme = AppTheme.MODE_DARK
     }
 }
