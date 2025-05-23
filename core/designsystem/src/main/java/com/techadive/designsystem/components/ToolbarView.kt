@@ -1,6 +1,8 @@
 package com.techadive.designsystem.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -12,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -27,9 +30,7 @@ fun ToolbarView(
     title: String? = null,
     startIcon: Int? = null,
     startIconDescription: String? = null,
-    endIconDescription: String? = null,
-    endIcon: ImageVector? = null,
-    endIconAction: () -> Unit,
+    endContent: (@Composable () -> Unit)? = null,
     startIconAction: () -> Unit = {},
     color: Color = Movies2cTheme.colors.background
 ) {
@@ -71,14 +72,8 @@ fun ToolbarView(
             containerColor = color
         ),
         actions = {
-            endIcon?.let {
-                IconButton(onClick = endIconAction) {
-                    Icon(
-                        imageVector = endIcon,
-                        contentDescription = endIconDescription,
-                        tint = Movies2cTheme.colors.onBackground
-                    )
-                }
+            if (endContent != null) {
+                endContent()
             }
         }
     )

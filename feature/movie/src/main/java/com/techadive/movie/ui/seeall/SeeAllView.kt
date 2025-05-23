@@ -95,13 +95,10 @@ fun SeeAllView(
             ) {
                 ToolbarView(
                     title = stringResource(movieListCategory.titleResource),
-                    startIconDescription = stringResource(com.techadive.common.R.string.back),
+                    startIconDescription = stringResource(R.string.back),
                     startIconAction = {
                         back()
                     },
-                    endIconAction = {
-
-                    }
                 )
             }
         },

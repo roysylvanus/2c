@@ -1,4 +1,4 @@
-package com.techadive.movie.ui.search
+package com.techadive.movie.ui.search.results
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.techadive.common.R
 import com.techadive.common.models.convertToMovieCardData
 import com.techadive.designsystem.components.InternetErrorView
 import com.techadive.designsystem.components.LoadingView
@@ -111,7 +112,7 @@ fun SearchMovieResultsView(
         } else if (searchResultsUIStateValues.isError && searchResultsUIStateValues.movieList?.results.isNullOrEmpty()) {
             InternetErrorView(
                 paddingValues = innerPadding,
-                message = stringResource(com.techadive.common.R.string.something_went_wrong)
+                message = stringResource(R.string.something_went_wrong)
             ) {
                 searchMovieResultsViewModel.searchMovies(query = searchQuery)
             }
@@ -134,7 +135,7 @@ fun SearchMovieResultsView(
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     text = stringResource(
-                        com.techadive.common.R.string.no_results_for_query,
+                        R.string.no_results_for_query,
                         searchQuery.orEmpty()
                     ),
                     style = Movies2cTheme.typography.h3,
@@ -168,8 +169,8 @@ private fun SearchViewToolBar(
                     ReadonlyTextField(
                         modifier = Modifier.weight(1f),
                         value = searchQuery,
-                        label = com.techadive.common.R.string.search,
-                        icon = com.techadive.common.R.drawable.ic_search,
+                        label = R.string.search,
+                        icon = R.drawable.ic_search,
                         onValueChange = {},
                         onClick = openSearch
                     )
@@ -179,7 +180,7 @@ private fun SearchViewToolBar(
                 IconButton(onClick = back) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(com.techadive.common.R.string.back),
+                        contentDescription = stringResource(R.string.back),
                         tint = Movies2cTheme.colors.onBackground
                     )
                 }

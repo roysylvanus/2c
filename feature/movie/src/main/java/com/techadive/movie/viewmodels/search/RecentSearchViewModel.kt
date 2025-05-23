@@ -1,5 +1,6 @@
 package com.techadive.movie.viewmodels.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techadive.common.utils.AppResult
@@ -43,6 +44,11 @@ class RecentSearchViewModel @Inject constructor(
     private fun getRecentSearchHistory() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+                _recentSearchUIState.update {
+                    it.copy(
+                        query = null
+                    )
+                }
                 getRecentSearchHistoryUseCase.getRecentSearchHistory().collect { result ->
                     when(result) {
                         is AppResult.Loading -> {
@@ -61,9 +67,10 @@ class RecentSearchViewModel @Inject constructor(
                         }
 
                         is AppResult.Success -> {
+                            Log.i("recentsearch", result.data.toString())
                             _recentSearchUIState.update {
                                 it.copy(
-                                    keywordsList = result.data,
+                                    recentKeywords = result.data,
                                     isLoading = false,
                                     isError = false
                                 )
@@ -79,6 +86,7 @@ class RecentSearchViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 deleteAllRecentSearchHistoryUseCase.deleteAllRecentSearchHistory()
+                getRecentSearchHistory()
             }
         }
     }
@@ -143,6 +151,7 @@ class RecentSearchViewModel @Inject constructor(
         val query: String? = null,
         val isLoading: Boolean = false,
         val isError: Boolean = false,
-        val keywordsList: KeywordsList? = null
+        val keywordsList: KeywordsList? = null,
+        val recentKeywords: KeywordsList? = null
     )
 }

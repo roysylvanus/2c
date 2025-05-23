@@ -18,9 +18,10 @@ import com.techadive.common.utils.AppRoutes
 import com.techadive.designsystem.theme.Movies2cTheme
 import com.techadive.movie.ui.details.MOVIE_ID
 import com.techadive.movie.ui.details.MovieDetailsView
-import com.techadive.movie.ui.search.SearchMovieResultsView
-import com.techadive.movie.ui.search.RecentSearchView
-import com.techadive.movie.ui.search.SEARCH_QUERY
+import com.techadive.movie.ui.search.recentsearch.RecentSearchList
+import com.techadive.movie.ui.search.results.SearchMovieResultsView
+import com.techadive.movie.ui.search.recentsearch.SearchQueryView
+import com.techadive.movie.ui.search.results.SEARCH_QUERY
 import com.techadive.movie.ui.seeall.EXTRA
 import com.techadive.movie.ui.seeall.SEE_ALL
 import com.techadive.movie.ui.seeall.SeeAllView
@@ -126,8 +127,11 @@ fun MainNavHost(
         }
 
         composable(AppRoutes.SEARCH.route) {
-            RecentSearchView(
+            SearchQueryView(
                 recentSearchViewModel = recentSearchViewModel,
+                showRecentSearches = {
+                    navController.navigate(AppRoutes.RECENT_SEARCH.route)
+                },
                 backClicked = {
                     navController.navigateUp()
                 },
@@ -135,6 +139,15 @@ fun MainNavHost(
                     navController.navigate("${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query")
                 }
             )
+        }
+
+        composable(AppRoutes.RECENT_SEARCH.route) {
+            RecentSearchList(
+                navController = navController,
+                recentSearchViewModel =recentSearchViewModel,
+            ) { query ->
+                navController.navigate("${AppRoutes.SEARCH_MOVIE_RESULTS.route}/$query")
+            }
         }
 
         composable(

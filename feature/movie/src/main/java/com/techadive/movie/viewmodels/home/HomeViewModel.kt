@@ -34,14 +34,20 @@ class HomeViewModel @Inject constructor(
 
     private var favorites = emptyList<Int>()
 
-    fun fetchHomeViewData() {
+    fun fetchHomeViewData(isRefresh: Boolean = false) {
         viewModelScope.launch {
+            if (isRefresh) {
+                _homeUIState.update { it.copy(isRefreshing = true) }
+            }
             supervisorScope {
                 launch { fetchFavorites() }
                 launch { fetchUpcomingMovies() }
                 launch { fetchNowPlayingMovies() }
                 launch { fetchPopularMovies() }
                 launch { fetchTopRatedMovies() }
+            }
+            if (isRefresh) {
+                _homeUIState.update { it.copy(isRefreshing = false) }
             }
         }
     }
@@ -132,6 +138,7 @@ class HomeViewModel @Inject constructor(
 
 
     data class HomeUIState(
+        val isRefreshing: Boolean = false,
         val upcomingState: SectionState<MovieList> = SectionState(),
         val topRatedState: SectionState<MovieList> = SectionState(),
         val popularState: SectionState<MovieList> = SectionState(),

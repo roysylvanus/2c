@@ -1,15 +1,20 @@
 package com.techadive.movies2c.ui.dashboard
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -69,10 +74,17 @@ private fun DashboardToolbar(
     ) {
         ToolbarView(
             startIcon = com.techadive.movies2c.R.drawable.c_icon,
-            endIcon = Icons.Filled.Search,
-            endIconAction = {
-                mainNavController.navigate(AppRoutes.SEARCH.name)
-            }
+            endContent = {
+                IconButton(onClick = {
+                    mainNavController.navigate(AppRoutes.SEARCH.name)
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = stringResource(com.techadive.common.R.string.search),
+                        tint = Movies2cTheme.colors.onBackground
+                    )
+                }
+            },
         )
     }
 }

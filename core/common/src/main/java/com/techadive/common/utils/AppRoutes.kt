@@ -8,5 +8,6 @@ enum class AppRoutes(val route: String) {
     SEARCH_MOVIE_RESULTS("search_movie_results"),
     DASHBOARD("dashboard"),
     MOVIE_DETAILS("movie_details"),
-    SEE_ALL("see_all")
+    SEE_ALL("see_all"),
+    RECENT_SEARCH("recent_search")
 }

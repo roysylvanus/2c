@@ -29,4 +29,8 @@
     <string name="no_favorites">Sorry, you have no favorite movies yet!</string>
     <string name="no_results">Sorry, couldn\'t find any movies</string>
     <string name="no_results_for_query">Sorry couldn\'t find search results for \"%1$s\"</string>
+    <string name="recent">Recent</string>
+    <string name="see_all">See All</string>
+    <string name="show_results">Show Results</string>
+    <string name="clear">Clear</string>
 </resources>
