@@ -79,7 +79,7 @@ Movie 2C is built using **MVVM** architecture with **Clean Architecture** princi
 
 2. **Add your TMDB API Access Token:**
 
-   Create or modify the `secret.properties` file at the root level and add:
+   Modify the `secret.properties` file at the root level and add:
 
    ```properties
    TMDB_ACCESS_TOKEN="add-your-api-access-token-here"
