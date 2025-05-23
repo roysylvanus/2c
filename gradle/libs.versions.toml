@@ -2,6 +2,7 @@
 agp = "8.9.2"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
+coreTest = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -69,7 +70,7 @@ app-cash-turbine = { group = "app.cash.turbine", name = "turbine", version.ref =
 accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh",version.ref = "accompanistSwipeRefresh" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieVersion" }
 hilt-navigation-compose = { group = "androidx.hilt",  name = "hilt-navigation-compose", version.ref = "hiltComposeNavigation" }
-
+test-core = { group = "androidx.test", name ="core", version.ref ="coreTest"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
